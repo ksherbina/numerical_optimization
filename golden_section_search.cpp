@@ -1,5 +1,5 @@
-//Implementation of Golden Section Search in order to find minimum of a 
-//quasi-convex function.
+//Implementation of Golden Section Search that can be used for multidimensional cases
+//to find a local minimum of a user-defined function.
 #include <iostream>
 #include <cmath>
 #include <stdio.h> //include printf
@@ -9,11 +9,12 @@
 using std::valarray;
 using std::greater;
 
-valarray<double> golden_section_search(int n, valarray<double> (*f)(valarray<double>), valarray<double> x, double a, double b, valarray<double> d, double e)
+valarray<double> golden_section_search(int n, double (*f)(valarray<double>), valarray<double> x, double a, double b, valarray<double> d, double e)
 {
-  valarray<double> xs (n), xu (n), xr (n), xl (n), fxr (n), fxl (n);
-  double diff, fxl_len, fxr_len;
-  double r=(0.5)*(1.0+sqrt (5.0));
+  //user-defined function f: R^n -> R.
+  valarray<double> xs (n), xu (n), xr (n), xl (n);
+  double diff, fxl, fxr;
+  double r=(0.5)*(sqrt(5.0)-1);
   printf("golden ratio = %2.8f \n",r); 
   xs=x+a*d; //initialize left endpoint
   xu=x+b*d; //initialize right endpoint
@@ -23,38 +24,58 @@ valarray<double> golden_section_search(int n, valarray<double> (*f)(valarray<dou
   xl=xs+(1.0-r)*(b-a)*d;
   fxr=f(xr);
   fxl=f(xl);
-  std::cout<<"size of f(xr): "<<fxr.size()<<" size of f(xl): "<<fxl.size()<<std::endl;
-  printf("xr = %2.8f, f(xr) = %2.8f \n",xr[0],fxr[0]);
-  printf("xl = %2.8f, f(xl) = %2.8f \n",xl[0],fxl[0]);
-  diff=sqrt(pow (xu-xs, 2).sum());  
+  printf("xr = %2.8f, f(xr) = %2.8f \n",xr[0],fxr);
+  printf("xl = %2.8f, f(xl) = %2.8f \n",xl[0],fxl);
+  diff=sqrt(pow(xu-xs, 2).sum());
   printf("invariant: %2.8f \n",diff);
-
-  //invariant: The euclidean norm of the difference between the left and right 
-  //endpoints is greater than the stopping tolerance
-  //fxl_len=sqrt(pow(fxl,2.0).sum());
-  //printf("%2.8f \n",fxl_len);
-  //fxr_len=sqrt(pow(fxr,2.0).sum());
-  while (diff>e) {
-    //Since it is assumed that the direction has already been found, you are 
-    //only trying to find the step size. Therefore, you can just compare the 
-    //magnitude of the function evaluations.
-    fxl_len=sqrt(pow(fxl,2.0).sum());
-    printf("%2.8f \n",fxl_len);
-    fxr_len=sqrt(pow(fxr,2.0).sum());
-    if (fxr_len>fxl_len) {
+  
+  int s1=18,s2=15;
+  int i=0;
+  printf("%s %s %*s %*s %*s %*s %*s\n","Iteration","xs",s2,"xu",s2,"xl",s2,"xr",s2,"f(xl)",s2,"f(xr)");
+  printf("%d %*.8f %*.8f %*.8f %*.8f %*.8f %*.8f \n",i,s1,xs[0],s2,xu[0],s2,xl[0],s2,xr[0],s2,fxl,s2,fxr);
+  while (i<10) {
+    if (fxr>fxl) {
+      printf("fxr greate than fxl\n");
       xu=xr;
       xr=xl;
-      fxr=f(xr);
+      fxr=fxl;
       xl=xs+(xu-xr);
       fxl=f(xl);
     } else {
+      printf("fxr less than or equal to fxl\n");
       xs=xl;
       xl=xr;
       fxl=fxr;
       xr=xu-(xl-xs);
       fxr=f(xr);
     }
-    diff=sqrt(pow (xu-xs, 2).sum());
+    printf("%d %*.8f %*.8f %*.8f %*.8f %*.8f %*.8f \n",i,s1,xs[0],s2,xu[0],s2,xl[0],s2,xr[0],s2,fxl,s2,fxr);
+    i++;
   }
+  
+  //invariant: The euclidean norm of the difference between the left and right
+  //endpoints is greater than the stopping tolerance
+  //while (diff>e) {
+    //Since it is assumed that the direction has already been found, you are 
+    //only trying to find the step size. Therefore, you can just compare the 
+    //magnitude of the function evaluations.
+  //  fxl_len=sqrt(pow(fxl,2.0).sum());
+  //  printf("%2.8f \n",fxl_len);
+  //  fxr_len=sqrt(pow(fxr,2.0).sum());
+  //  if (fxr_len>fxl_len) {
+  //    xu=xr;
+  //    xr=xl;
+  //    fxr=f(xr);
+  //    xl=xs+(xu-xr);
+  //    fxl=f(xl);
+  //  } else {
+  //    xs=xl;
+  //    xl=xr;
+  //    fxl=fxr;
+  //    xr=xu-(xl-xs);
+  //    fxr=f(xr);
+  //  }
+  //  diff=sqrt(pow (xu-xs, 2).sum());
+  //}
   return (xu+xs)/2;
 }
