@@ -6,7 +6,7 @@
 #include <valarray>
 using std::valarray;
 
-valarray<double> golden_section_search(int n, valarray<double> (*f)(valarray<double>), valarray<double> x, double a, double b, valarray<double> d, double e);
+valarray<double> golden_section_search(int n, double (*f)(valarray<double>), valarray<double> x, double a, double b, valarray<double> d, double e);
  
 // This is the end of the header guard
 #endif

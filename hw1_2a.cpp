@@ -8,8 +8,9 @@
 
 using std::valarray;
 
-valarray<double> func(valarray<double> x) {
-    return pow (x,3.0)-3.0*(pow (x,2.0));
+double func(valarray<double> x) {
+    //user-defined function f such that f:R^n->R.
+    return (pow(x,3.0)-3.0*(pow(x,2.0)))[0];
 }
 
 int main()
@@ -18,13 +19,16 @@ int main()
   t=clock();
   int n=1;
   valarray<double> d (n), x (n), xs (n), soln(n);
-  double a,b,error;
+  double a,b,error,fval1;
 
   d[0]=1.0;
   x[0]=0.0;
   a=0;
   b=3;
-  error=pow (10.0, -4);
+  error=pow(10.0,-4);
+  //fval1=func(x+b*d);
+  //printf("x = %2.8f \n",(x+b*d)[0]);
+  //printf("f(x) = %2.8f \n",fval1);
   soln=golden_section_search(n,func,x,a,b,d,error);
   std::cout<<"size of soln: "<<soln.size()<<std::endl;
   printf("soln: %2.8f \n",soln[0]);
