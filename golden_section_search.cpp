@@ -11,5 +11,6 @@ valarray<double> golden_section_search(int n, valarray<double> x, double a, vala
 {
   valarray<double> xs (n);
   xs = x + a*d;
+  printf("left endpoint: %2.8f \n",xs[0]);
   return xs;
 }
