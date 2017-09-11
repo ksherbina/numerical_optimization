@@ -9,29 +9,26 @@
 using std::valarray;
 
 valarray<double> func(valarray<double> x) {
-    return pow (x, 3.0)- 3.0*(pow (x, 2.0));
+    return pow (x,3.0)-3.0*(pow (x,2.0));
 }
 
 int main()
 {
   clock_t t;
-  t = clock();
-  int n = 1;
-  valarray<double> d (n);
-  valarray<double> x (n);
-  valarray<double> xs (n);
-  valarray<double> soln (n);
+  t=clock();
+  int n=1;
+  valarray<double> d (n), x (n), xs (n), soln(n);
+  double a,b,error;
 
-  double a = 0.5;
-  double b = 1.5;
-  printf ("%2.4f %2.4f \n",a,b);
-
-  d[0] = 1.0;
-  x[0] = 2.0;
-  soln = golden_section_search(n,x,a,d);
+  d[0]=1.0;
+  x[0]=0.0;
+  a=0;
+  b=3;
+  error=pow (10.0, -4);
+  soln=golden_section_search(n,func,x,a,b,d,error);
   std::cout<<"size of soln: "<<soln.size()<<std::endl;
   printf("soln: %2.8f \n",soln[0]);
-  t = clock() - t;
+  t=clock()-t;
   printf ("Runtime of algorithm: %ld clicks (%f seconds).\n",t,((float)t)/CLOCKS_PER_SEC);
   return 0;
 }
