@@ -26,6 +26,7 @@ int main()
   a=0;
   b=3;
   error=pow(10.0,-4);
+  printf("Interval of Uncertainity = %2.8f \n",error);
   //fval1=func(x+b*d);
   //printf("x = %2.8f \n",(x+b*d)[0]);
   //printf("f(x) = %2.8f \n",fval1);
