@@ -5,6 +5,7 @@
 #include <time.h>  //for clock_t, clock, CLOCKS_PER_SEC
 #include <valarray>
 #include "golden_section_search.h"
+#include "dichotomous_search.h"
 
 using std::valarray;
 
@@ -16,20 +17,31 @@ double func(valarray<double> x) {
 int main()
 {
   clock_t t;
-  t=clock();
   int n=1; //User must specify number of dimensions
-  valarray<double> d (n), x (n), xs (n), soln(n);
-  double a,b,error;
+  valarray<double> d (n), x (n), xs (n), gss (n), ds (n);
+  double a,b,error,delta;
   
-  //User specified inputs and parameters:
   d[0]=1.0;
   x[0]=0.0;
   a=0;
   b=3;
-  error=pow(10.0,-4);
-  soln=golden_section_search(n,func,x,a,b,d,error);
-  printf("Local minimum = %2.8f (given interval of uncertainty of %2.8f)\n",soln[0],error);
+  error=pow(10.0,-4); //Interval of Uncertainty
+  delta=pow(10.0,-2); //Distinguishability constant for dichotomous search
+  
+  t=clock();
+  std::cout<<"Running Golden Section Search..."<<std::endl;
+  gss=golden_section_search(n,func,x,a,b,d,error);
+  printf("Local minimum = %2.8f (given interval of uncertainty of %2.8f)\n",gss[0],error);
   t=clock()-t;
   printf ("Runtime of algorithm: %ld clicks (%f seconds).\n",t,((float)t)/CLOCKS_PER_SEC);
+  
+  //User specified inputs and parameters to run dichotomous search:
+  t=clock();
+  std::cout<<std::endl<<"Running Dichotomous Search..."<<std::endl;
+  ds=dichotomous_search(n,func,x,a,b,d,error,delta);
+  printf("Local minimum = %2.8f (given interval of uncertainty of %2.8f)\n",ds[0],error);
+  t=clock()-t;
+  printf ("Runtime of algorithm: %ld clicks (%f seconds).\n",t,((float)t)/CLOCKS_PER_SEC);
+  
   return 0;
 }
