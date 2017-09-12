@@ -12,7 +12,7 @@ valarray<double> golden_section_search(int n, double (*f)(valarray<double>), val
 {
   // User must supply the function f: R^n -> R.
   valarray<double> xs (n), xu (n), xr (n), xl (n);
-  double diff, fxl, fxr;
+  double diff, diff0, fxl, fxr;
   // Since you want to stay within the initial left and right endpoints, use the solution to
   //t^2+t-1=0 such that t>0 as the golden ratio r.
   double r=(0.5)*(sqrt(5.0)-1);
@@ -34,6 +34,7 @@ valarray<double> golden_section_search(int n, double (*f)(valarray<double>), val
   // invariant: The euclidean norm of the difference between the left and right
   // endpoints is greater than the stopping tolerance
   while (diff>e) {
+    diff0=diff;
     i++;
     if (fxr>fxl) {
       //printf("fxr greate than fxl\n");
@@ -52,7 +53,11 @@ valarray<double> golden_section_search(int n, double (*f)(valarray<double>), val
     }
     printf("%d %*.8f %*.8f %*.8f %*.8f %*.8f %*.8f \n",i,s1,xs[0],s2,xu[0],s2,xl[0],s2,xr[0],s2,fxl,s2,fxr);
     diff=sqrt(pow(xu-xs, 2).sum());
-    //printf("invariant: %2.8f \n",diff);
+    if (diff0==diff) {
+      printf("Cannot find a minimum given the interval of uncertainty of %2.8f.\n",e);
+      printf("||xu-xs|| = %2.8f\n",diff);
+      break;
+    }
   }
   return (xu+xs)/2;
 }
