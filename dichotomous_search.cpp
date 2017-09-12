@@ -10,10 +10,10 @@ using std::valarray;
 
 valarray<double> golden_section_search(int n, double (*f)(valarray<double>), valarray<double> x, double a, double b, valarray<double> d, double e)
 {
-  // User must supply the function f: R^n -> R.
+  //User must supply the function f: R^n -> R.
   valarray<double> xs (n), xu (n), xr (n), xl (n);
   double diff, fxl, fxr;
-  // Since you want to stay within the initial left and right endpoints, use the solution to
+  //Since you want to stay within the initial left and right endpoints, use the solution to
   //t^2+t-1=0 such that t>0 as the golden ratio r.
   double r=(0.5)*(sqrt(5.0)-1);
   //printf("golden ratio = %2.8f \n",r);
@@ -31,8 +31,8 @@ valarray<double> golden_section_search(int n, double (*f)(valarray<double>), val
   printf("%s %s %*s %*s %*s %*s %*s\n","Iteration","xs",s2,"xu",s2,"xl",s2,"xr",s1,"f(xl)",s2,"f(xr)");
   printf("%d %*.8f %*.8f %*.8f %*.8f %*.8f %*.8f \n",i,s1,xs[0],s2,xu[0],s2,xl[0],s2,xr[0],s2,fxl,s2,fxr);
   
-  // invariant: The euclidean norm of the difference between the left and right
-  // endpoints is greater than the stopping tolerance
+  //invariant: The euclidean norm of the difference between the left and right
+  //endpoints is greater than the stopping tolerance
   while (diff>e) {
     i++;
     if (fxr>fxl) {
