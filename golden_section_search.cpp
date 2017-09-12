@@ -28,8 +28,10 @@ valarray<double> golden_section_search(int n, double (*f)(valarray<double>), val
   int s1=18,s2=16;
   int i=0;
   printf("***NOTE: xs=left endpoint; xu=right endpoint; xl=left-hand search point; xr=right-hand search point***\n");
-  printf("%s %s %*s %*s %*s %*s %*s\n","Iteration","xs",s2,"xu",s2,"xl",s2,"xr",s1,"f(xl)",s2,"f(xr)");
-  printf("%d %*.8f %*.8f %*.8f %*.8f %*.8f %*.8f \n",i,s1,xs[0],s2,xu[0],s2,xl[0],s2,xr[0],s2,fxl,s2,fxr);
+  printf("%s & %s & %*s & %*s & %*s & %*s & %*s \\\\ \n","Iteration","xs",s2,"xu",s2,"xl",s2,"xr",s1,"f(xl)",s2,"f(xr)");
+  printf("%d & %*.8f & %*.8f & %*.8f & %*.8f & %*.8f & %*.8f \\\\ \n",i,s1,xs[0],s2,xu[0],s2,xl[0],s2,xr[0],s2,fxl,s2,fxr);
+  //printf("%s %s %*s %*s %*s %*s %*s\n","Iteration","xs",s2,"xu",s2,"xl",s2,"xr",s1,"f(xl)",s2,"f(xr)");
+  //printf("%d %*.8f %*.8f %*.8f %*.8f %*.8f %*.8f \n",i,s1,xs[0],s2,xu[0],s2,xl[0],s2,xr[0],s2,fxl,s2,fxr);
   
   // invariant: The euclidean norm of the difference between the left and right
   // endpoints is greater than the stopping tolerance
@@ -51,7 +53,8 @@ valarray<double> golden_section_search(int n, double (*f)(valarray<double>), val
       xr=xu-(xl-xs);
       fxr=f(xr);
     }
-    printf("%d %*.8f %*.8f %*.8f %*.8f %*.8f %*.8f \n",i,s1,xs[0],s2,xu[0],s2,xl[0],s2,xr[0],s2,fxl,s2,fxr);
+    printf("%d & %*.8f & %*.8f & %*.8f & %*.8f & %*.8f & %*.8f \\\\ \n",i,s1,xs[0],s2,xu[0],s2,xl[0],s2,xr[0],s2,fxl,s2,fxr);
+    //printf("%d %*.8f %*.8f %*.8f %*.8f %*.8f %*.8f \n",i,s1,xs[0],s2,xu[0],s2,xl[0],s2,xr[0],s2,fxl,s2,fxr);
     diff=sqrt(pow(xu-xs, 2).sum());
     if (diff0==diff) {
       printf("Cannot find a minimum given the interval of uncertainty of %2.8f.\n",e);
