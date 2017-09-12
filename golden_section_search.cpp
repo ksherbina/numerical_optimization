@@ -10,7 +10,7 @@ using std::valarray;
 
 valarray<double> golden_section_search(int n, double (*f)(valarray<double>), valarray<double> x, double a, double b, valarray<double> d, double e)
 {
-  //user-defined function f: R^n -> R.
+  //User must supply the function f: R^n -> R.
   valarray<double> xs (n), xu (n), xr (n), xl (n);
   double diff, fxl, fxr;
   //Since you want to stay within the initial left and right endpoints, use the solution to
