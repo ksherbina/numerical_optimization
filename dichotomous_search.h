@@ -1,4 +1,4 @@
-// This is start of the header guard.  <>_H can be any unique name.  By convention, we use the name of the header file.
+// This is start of the header guard.  ADD_H can be any unique name.  By convention, we use the name of the header file.
 #ifndef GOLDEN_SECTION_SEARCH_H
 #define GOLDEN_SECTION_SEARCH_H
  
