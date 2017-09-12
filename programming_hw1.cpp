@@ -9,7 +9,7 @@
 
 using std::valarray;
 
-double func(valarray<double> x) {
+double func1(valarray<double> x) {
     //user-defined function f such that f:R^n->R.
     return (pow(x,3.0)-3.0*(pow(x,2.0)))[0];
 }
@@ -30,16 +30,16 @@ int main()
   
   t=clock();
   std::cout<<"Running Golden Section Search..."<<std::endl;
-  gss=golden_section_search(n,func,x,a,b,d,error);
-  printf("Local minimum = %2.8f (given interval of uncertainty of %2.8f)\n",gss[0],error);
+  gss=golden_section_search(n,func1,x,a,b,d,error);
+  printf("Final output = %2.8f\n",gss[0]);
   t=clock()-t;
   printf ("Runtime of algorithm: %ld clicks (%f seconds).\n",t,((float)t)/CLOCKS_PER_SEC);
   
   //User specified inputs and parameters to run dichotomous search:
   t=clock();
   std::cout<<std::endl<<"Running Dichotomous Search..."<<std::endl;
-  ds=dichotomous_search(n,func,x,a,b,d,error,delta);
-  printf("Local minimum = %2.8f (given interval of uncertainty of %2.8f)\n",ds[0],error);
+  ds=dichotomous_search(n,func1,x,a,b,d,error,delta);
+  printf("Final output = %2.8f\n",ds[0]);
   t=clock()-t;
   printf ("Runtime of algorithm: %ld clicks (%f seconds).\n",t,((float)t)/CLOCKS_PER_SEC);
   
