@@ -35,8 +35,7 @@ int main()
   clock_t t;
   int n=2; //User must specify number of dimensions
 
-  valarray<double> d(n), x0(n);
-  double ar1,ar2;
+  valarray<double> d(n),x0(n),ar1(n),ar2(n);
   double stepsize=1; 
   double eta=2.0;
   double theta=0.5;
@@ -57,7 +56,7 @@ int main()
   t=clock();
   std::cout<<"Running Armijio's Rule Inexact Line Search..."<<std::endl;
   ar1=armijo_rule(n,func1a,g1a,x0,d,stepsize,eta,theta);
-  printf("Final output = %2.8f\n",ar1);
+  printf("Final output = [%2.8f %2.8f]\n",ar1[0],ar1[1]);
   t=clock()-t;
   printf ("Runtime of algorithm: %ld clicks (%f seconds).\n",t,((float)t)/CLOCKS_PER_SEC);
  
