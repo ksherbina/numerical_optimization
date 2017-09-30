@@ -3,10 +3,7 @@
 #include <cmath>
 #include <stdio.h> //include printf
 #include <time.h>  //for clock_t, clock, CLOCKS_PER_SEC
-#include <valarray>
-//#include "armijo_rule.h"
-
-using std::valarray;
+#include "newton_1d.h"
 
 double func2a(double x) {
     //user-defined function f such that f:R->R.
@@ -26,7 +23,8 @@ double hessian2a(double x) {
 int main()
 {
   clock_t t;
-  double x0,a,b;
+  double x0,a,b,xn,fn;
+  
   double epsilon=pow(10.0,-8);
   double theta=0.5;
 
@@ -45,12 +43,12 @@ int main()
   std::cout<<"Minimize f(x,y)=x^3-3*x^2"<<std::endl;
   t=clock();
   std::cout<<"Running 1-Dimensional Newton's Method..."<<std::endl;
-  /*
-  ar1=armijo_rule(n,func1a,g1a,x0,d,stepsize,eta,theta);
-  printf("Final output = [%2.8f %2.8f]\n",ar1[0],ar1[1]);
+  
+  std::tie(xn, fn)=newton_1d(func2a,grad2a,hessian2a,x0,a,b,epsilon,theta);
+  printf("The minimum of the function is %2.8f and occurs at %2.8f\n",xn,fn);
   t=clock()-t;
   printf ("Runtime of algorithm: %ld clicks (%f seconds).\n",t,((float)t)/CLOCKS_PER_SEC);
-  
+  /*
   //User specified parameters to run dichotomous search different from golden section search
   error=2*pow(10.0,-2); //Interval of Uncertainty
   delta=pow(10.0,-2); //Distinguishability constant for dichotomous search
