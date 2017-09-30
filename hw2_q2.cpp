@@ -26,8 +26,6 @@ double hessian2a(double x) {
 int main()
 {
   clock_t t;
-  int n=2; //User must specify number of dimensions
-  
   double x0,a,b;
   double epsilon=pow(10.0,-8);
   double theta=0.5;
@@ -43,20 +41,16 @@ int main()
   printf("g1=%2.8f\n",g1);
   double h1=hessian2a(x0);
   printf("h1=%2.8f\n",h1);
-  /*
-  valarray<double> g1a=grad1a(x0);
-  for (int i=0;i<g1a.size();i++) {
-      printf("gradient1=%2.8f\n",g1a[i]);
-  }
 
-  std::cout<<"Minimize f(x,y)=-12y+4x^2+4y^2+4xy"<<std::endl;
+  std::cout<<"Minimize f(x,y)=x^3-3*x^2"<<std::endl;
   t=clock();
-  std::cout<<"Running Armijio's Rule Inexact Line Search..."<<std::endl;
+  std::cout<<"Running 1-Dimensional Newton's Method..."<<std::endl;
+  /*
   ar1=armijo_rule(n,func1a,g1a,x0,d,stepsize,eta,theta);
   printf("Final output = [%2.8f %2.8f]\n",ar1[0],ar1[1]);
   t=clock()-t;
   printf ("Runtime of algorithm: %ld clicks (%f seconds).\n",t,((float)t)/CLOCKS_PER_SEC);
- 
+  
   //User specified parameters to run dichotomous search different from golden section search
   error=2*pow(10.0,-2); //Interval of Uncertainty
   delta=pow(10.0,-2); //Distinguishability constant for dichotomous search
