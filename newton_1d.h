@@ -1,9 +1,8 @@
-#ifndef ARMIJO_RULE_H
-#define ARMIJO_RULE_H
+#ifndef NEWTON_1D_H
+#define NEWTON_1D_H
  
-#include <valarray>
-using std::valarray;
+#include <tuple>
 
-valarray<double> armijo_rule(int n,double (*f)(valarray<double>),valarray<double> g,valarray<double> xk, valarray<double> d, double a, double eta, double theta);
+std::tuple<double, double>  newton_1d(double (*f)(double),double (*g)(double),double (*h)(double),double x0, double a, double b, double epsilon, double theta);
  
 #endif
