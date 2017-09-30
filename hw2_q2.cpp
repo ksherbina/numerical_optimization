@@ -1,4 +1,4 @@
-//Function, inputs, and parameters for problem 1 of homework 2a in ISE 520 Fall 2017
+//Function, inputs, and parameters for problem 2 of homework 2a in ISE 520 Fall 2017
 #include <iostream>
 #include <cmath>
 #include <stdio.h> //include printf
@@ -28,7 +28,7 @@ int main()
   double epsilon=pow(10.0,-8);
   double theta=0.5;
 
-  //Problem 1a
+  //Problem 2a
   x0=1.2;
   a=1.0;
   b=4.0;
@@ -45,7 +45,6 @@ int main()
   std::cout<<"Minimize f(x,y)=x^3-3*x^2"<<std::endl;
   t=clock();
   std::cout<<"Running 1-Dimensional Newton's Method..."<<std::endl;
-  
   std::tie(xn, fn)=newton_1d(func2a,grad2a,hessian2a,x0,a,b,epsilon,theta);
   printf("The minimum of the function over [%2.8f, %2.8f] is %2.8f and occurs at %2.8f\n",a,b,fn,xn);
   t=clock()-t;
