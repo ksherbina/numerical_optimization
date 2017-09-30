@@ -13,15 +13,15 @@ double func2a(double x) {
     return pow(x,3)-3*pow(x,2);
 }
 
-/*
-valarray<double> grad1a(valarray<double> x) {
-    //gradient of func1a; in R^n
-    valarray<double> g (2);
-    g[0]=8.0*x[0]+4.0*x[1];
-    g[1]=4.0*x[0]+8.0*x[1]-12.0;
-    return g;
+double grad2a(double x) {
+  //gradient of func1a; in R^n
+  return 3.0*pow(x,2)-6.0*x;
 }
-*/
+
+double hessian2a(double x) {
+  //gradient of func1a; in R^n
+  return 6.0*x-6.0;
+}
 
 int main()
 {
@@ -39,6 +39,10 @@ int main()
 
   double f1=func2a(x0);
   printf("f1=%2.8f\n",f1);
+  double g1=grad2a(x0);
+  printf("g1=%2.8f\n",g1);
+  double h1=hessian2a(x0);
+  printf("h1=%2.8f\n",h1);
   /*
   valarray<double> g1a=grad1a(x0);
   for (int i=0;i<g1a.size();i++) {
