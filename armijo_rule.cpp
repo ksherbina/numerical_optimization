@@ -14,10 +14,10 @@ to minimize a function.
 
 using std::valarray;
 
-int comparison (int iter,double (*f)(valarray<double>),valarray<double> x0,double fx0,valarray<double> gx0,valarray<double> p,double multiplier,double th)
+int comparison (int iter,double (*f)(valarray<double>),valarray<double> x0,double fx0,valarray<double> gx0,valarray<double> p,double multiplier,double th,valarray<double>& xc)
 {
   double fxc,lc,prod;
-  valarray<double> xc=x0+(multiplier*p);
+  xc=x0+(multiplier*p);
   fxc=f(xc);
   prod=std::inner_product(std::begin(gx0),std::end(gx0),std::begin(p),0.0);
   lc=fx0+multiplier*th*prod;
@@ -32,13 +32,14 @@ int comparison (int iter,double (*f)(valarray<double>),valarray<double> x0,doubl
   }
 }
 
-double armijo_rule(int n,double (*f)(valarray<double>),valarray<double> gxk,valarray<double> xk, valarray<double> d, double a, double eta, double theta)
+valarray<double> armijo_rule(int n,double (*f)(valarray<double>),valarray<double> gxk,valarray<double> xk,valarray<double> d, double a, double eta, double theta)
 {
   //User must supply the function f: R^n -> R and the gradient of the function g:R^n.
   double alpha;
   int t=1;
   alpha=a;
   double fxk=f(xk);
+  valarray<double> xc=xk;
   
   std::cout<<std::endl;
   printf("NOTE 1: multiplier = (eta^j)^i*alpha where j is either 1 or -1 depending on whether\n");
@@ -50,21 +51,21 @@ double armijo_rule(int n,double (*f)(valarray<double>),valarray<double> gxk,vala
   int s1=22,s2=16;
   printf("%s %s %*s %*s %*s %*s\n","Iteration (i)","multiplier",s2,"x_i",s2,"y_i",s2,"f(x_i,y_i)",s2,"r(multiplier)");
   
-  if (comparison(t,f,xk,fxk,gxk,d,alpha,theta)==1) {
+  if (comparison(t,f,xk,fxk,gxk,d,alpha,theta,xc)==1) {
     //std::cout<<"f(x_i) <= r(multiplier)"<<std::endl;
     alpha=pow(eta,t)*alpha;
-    while (comparison(t,f,xk,fxk,gxk,d,alpha,theta)==0) {
+    while (comparison(t,f,xk,fxk,gxk,d,alpha,theta,xc)==0) {
       t+=1;
       alpha=pow(eta,t)*alpha;
     }
   } else {
     //std::cout<<"f(x_i) > r(multiplier)"<<std::endl;
     alpha=pow(1/eta,t)*alpha;
-    while (comparison(t,f,xk,fxk,gxk,d,alpha,theta)==0) {
+    while (comparison(t,f,xk,fxk,gxk,d,alpha,theta,xc)==0) {
       t+=1;
       alpha=pow(1/eta,t)*alpha;
     }
   }
  
-  return alpha;
+  return xc;
 }
