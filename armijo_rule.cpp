@@ -28,6 +28,7 @@ int comparison (int iter,double (*f)(valarray<double>),valarray<double> (*g)(val
 
   int s1=16;
   //printf("%d & %*.8f & %*.8f & %*.8f & %*.8f & %*.8f & %*.8f \\\\ \n",i,s1,xs[0],s2,xu[0],s2,xl[0],s2,xr[0],s2,fxl,s2,fxr);
+  //printf("%d & [%.8f %.8f] & [%.8f %.8f] & %.8f & %.8f \\\\ \n",iter,xc[0],xc[1],xk[0],xk[1],fxc,lc);
   printf("%d              [%.8f %.8f]    [%.8f %.8f] %*.8f %*.8f\n",iter,xc[0],xc[1],xk[0],xk[1],s1,fxc,s1,lc);
   
   if (fxk<=lc) {
@@ -45,13 +46,11 @@ valarray<double> armijo_rule(int n,double (*f)(valarray<double>),valarray<double
   alpha=a;
   valarray<double> xc=x0;
   
-  /*
   std::cout<<std::endl;
-  printf("NOTE 1: x_i = x_{i-1}+(eta^j)^i*alpha*grad where j is either 1 or -1 depending on whether\n");
-  printf("alpha is doubled or halved in that iteration i and grad is the gradient of the objective\n");
-  printf("function at x_{i-1}.\n")
-  printf("NOTE 2: r(x_{i-1}) = f(x_{i-1})+(eta^j)^i*alpha*grad*d.\n");
-  */
+  printf("NOTE 1: x_i = x_{i-1}+(eta^j)^i*alpha*d where j is either 1 or -1 depending on whether\n");
+  printf("alpha is doubled or halved in that iteration i. \n");
+  printf("NOTE 2: r(x_{i-1}) = f(x_{i-1})+(eta^j)^i*alpha*grad*d where grad is the gradient of the objective.\n");
+  printf("function at x_{i-1}.\n");
   
   std::cout<<std::endl;
   int s1=8, s2=22, s3=29;
