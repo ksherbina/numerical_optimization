@@ -25,6 +25,7 @@ int comparison (int iter,double (*f)(valarray<double>),valarray<double> x0,doubl
   int s1=22,s2=16;
   //printf("%d & %*.8f & %*.8f & %*.8f & %*.8f & %*.8f & %*.8f \\\\ \n",i,s1,xs[0],s2,xu[0],s2,xl[0],s2,xr[0],s2,fxl,s2,fxr);
   printf("%d %*.8f %*.8f %*.8f %*.8f %*.8f\n",iter,s1,multiplier,s2,xc[0],s2,xc[1],s2,fxc,s2,lc);
+  
   if (fxc<=lc) {
     return 1;
   } else {
@@ -66,6 +67,7 @@ valarray<double> armijo_rule(int n,double (*f)(valarray<double>),valarray<double
       alpha=pow(1/eta,t)*alpha;
     }
   }
- 
+  std::cout<<std::endl;
+  
   return xc;
 }
