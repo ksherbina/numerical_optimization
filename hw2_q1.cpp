@@ -20,22 +20,26 @@ valarray<double> grad1a(valarray<double> x) {
     g[1]=4.0*x[0]+8.0*x[1]-12.0;
     return g;
 }
-/*
-double func2(valarray<double> x) {
+
+double func1b(valarray<double> x) {
   //user-defined function f such that f:R^n->R.
-  valarray<double> z = x;
-  for (int i=0;i<x.size();i++) {
-    z[i] = 1/x[i];
-  }
-  return (20*z+pow(x,2.0))[0];
+  return 2*x[0]*x[1]+(10/x[0])+(5*x[1]/pow(x[0],2));
 }
-*/
+
+valarray<double> grad1b(valarray<double> x) {
+  //gradient of func1a; in R^n
+  valarray<double> g (2);
+  g[0]=2*x[1]-(10/pow(x[0],2))-(10*x[1]/pow(x[0],3));
+  g[1]=2*x[0]+(5/pow(x[0],2));
+  return g;
+}
+
 int main()
 {
   clock_t t;
   int n=2; //User must specify number of dimensions
 
-  valarray<double> d(n), x0(n), ar1(n);
+  valarray<double> d(n), x0(n), ar1(n), ar2(n), ar3(n);
   double stepsize=1; 
   double eta=2.0;
   double theta=0.5;
@@ -60,40 +64,26 @@ int main()
   t=clock()-t;
   printf ("Runtime of algorithm: %ld clicks (%f seconds).\n",t,((float)t)/CLOCKS_PER_SEC);
  
-  /*
-  //User specified parameters to run dichotomous search different from golden section search
-  error=2*pow(10.0,-2); //Interval of Uncertainty
-  delta=pow(10.0,-2); //Distinguishability constant for dichotomous search
-  
+  //Problem 1b
+  d={1.0,0.0};
+  x0={1.0,1.0};
+  std::cout<<"Minimize objective function in problem 1b"<<std::endl;
   t=clock();
-  std::cout<<std::endl<<"Running Dichotomous Search..."<<std::endl;
-  ds=dichotomous_search(n,func1,x,a,b,d,error,delta);
-  printf("Final output = %2.8f\n",ds[0]);
+  std::cout<<"Running Armijio's Rule Inexact Line Search..."<<std::endl;
+  ar2=armijo_rule(n,func1b,grad1b,x0,d,stepsize,eta,theta);
+  printf("Final output = [%2.8f %2.8f]\n",ar2[0],ar2[1]);
+  t=clock()-t;
+  printf ("Runtime of algorithm: %ld clicks (%f seconds).\n",t,((float)t)/CLOCKS_PER_SEC);
+  
+  d={0.0,-1.0};
+  x0={3.0,3.0};
+  std::cout<<"Minimize objective function in problem 1b"<<std::endl;
+  t=clock();
+  std::cout<<"Running Armijio's Rule Inexact Line Search..."<<std::endl;
+  ar3=armijo_rule(n,func1b,grad1b,x0,d,stepsize,eta,theta);
+  printf("Final output = [%2.8f %2.8f]\n",ar3[0],ar3[1]);
   t=clock()-t;
   printf ("Runtime of algorithm: %ld clicks (%f seconds).\n",t,((float)t)/CLOCKS_PER_SEC);
 
-  //Problem 2b
-  x[0]=0.01;
-  a=0.04;
-  b=6;
-  error=pow(10.0,-4); //Interval of Uncertainty
-  std::cout<<std::endl<<"Minimize f(x)=(20/x)+x^2"<<std::endl;
-  t=clock();
-  std::cout<<"Running Golden Section Search..."<<std::endl;
-  gss=golden_section_search(n,func2,x,a,b,d,error);
-  printf("Final output = %2.8f\n",gss[0]);
-  t=clock()-t;
-  printf ("Runtime of algorithm: %ld clicks (%f seconds).\n",t,((float)t)/CLOCKS_PER_SEC);
-  
-  error=2*pow(10.0,-2); //Interval of Uncertainty
-  delta=pow(10.0,-2); //Distinguishability constant for dichotomous search
-  
-  t=clock();
-  std::cout<<std::endl<<"Running Dichotomous Search..."<<std::endl;
-  ds=dichotomous_search(n,func2,x,a,b,d,error,delta);
-  printf("Final output = %2.8f\n",ds[0]);
-  t=clock()-t;
-  printf ("Runtime of algorithm: %ld clicks (%f seconds).\n",t,((float)t)/CLOCKS_PER_SEC);
-*/
   return 0;
 }
