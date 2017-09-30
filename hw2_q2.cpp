@@ -20,6 +20,21 @@ double hessian2a(double x) {
   return 6.0*x-6.0;
 }
 
+double func2b(double x) {
+  //user-defined function f such that f:R->R.
+  return exp(x)-2*x;
+}
+
+double grad2b(double x) {
+  //gradient of func1a; in R^n
+  return exp(x)-2;
+}
+
+double hessian2b(double x) {
+  //gradient of func1a; in R^n
+  return exp(x);
+}
+
 int main()
 {
   clock_t t;
@@ -49,6 +64,20 @@ int main()
   printf("The minimum of the function over [%2.8f, %2.8f] is %2.8f and occurs at %2.8f\n",a,b,fn,xn);
   t=clock()-t;
   printf ("Runtime of algorithm: %ld clicks (%f seconds).\n",t,((float)t)/CLOCKS_PER_SEC);
+  std::cout<<std::endl;
+  
+  //Problem 2b
+  x0=0.2;
+  a=0.0;
+  b=1.0;
+  std::cout<<"Minimize f(x,y)=exp(x)-2x"<<std::endl;
+  t=clock();
+  std::cout<<"Running 1-Dimensional Newton's Method..."<<std::endl;
+  std::tie(xn, fn)=newton_1d(func2a,grad2a,hessian2a,x0,a,b,epsilon,theta);
+  printf("The minimum of the function over [%2.8f, %2.8f] is %2.8f and occurs at %2.8f\n",a,b,fn,xn);
+  t=clock()-t;
+  printf ("Runtime of algorithm: %ld clicks (%f seconds).\n",t,((float)t)/CLOCKS_PER_SEC);
+
   
   return 0;
 }
