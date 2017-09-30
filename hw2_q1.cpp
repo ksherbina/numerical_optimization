@@ -42,21 +42,21 @@ int main()
   double theta=0.5;
 
   //Problem 1a
-  d={1,0};
+  d={1.0,0.0};
   x0={-1.0,0.5};
 
   double f1=func1a(x0);
   printf("f1=%2.8f\n",f1);
 
-  valarray<double> g1=grad1a(x0);
-  for (int i=0;i<g1.size();i++) {
-      printf("gradient1=%2.8f\n",g1[i]);
+  valarray<double> g1a=grad1a(x0);
+  for (int i=0;i<g1a.size();i++) {
+      printf("gradient1=%2.8f\n",g1a[i]);
   }
 
   std::cout<<"Minimize f(x,y)=-12y+4x^2+4y^2+4xy"<<std::endl;
   t=clock();
   std::cout<<"Running Armijio's Rule Inexact Line Search..."<<std::endl;
-  ar1=armijo_rule(n,func1a,grad1a,x0,d,stepsize,eta,theta);
+  ar1=armijo_rule(n,func1a,g1a,x0,d,stepsize,eta,theta);
   printf("Final output = %2.8f\n",ar1);
   t=clock()-t;
   printf ("Runtime of algorithm: %ld clicks (%f seconds).\n",t,((float)t)/CLOCKS_PER_SEC);
