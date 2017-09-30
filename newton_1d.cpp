@@ -12,18 +12,18 @@ std::tuple<double, double>  newton_1d(double (*f)(double),double (*g)(double),do
 {
   //User must supply the functions f: R^n -> R, the gradient of f g:R^n, and hessian of f h:R^n.
   double d,alpha,xd,fxd;
+  int iter=1;
   double xc=x0;
   double fxc=f(xc);
   double gxc=g(xc);
   double hxc=h(xc);
   
-  /*
-  int s1=18,s2=16;
+
+  int s1=22,s2=16,s3=14;
   //printf("%s & %s & %*s & %*s & %*s & %*s & %*s \\\\ \n","Iteration","xs",s2,"xu",s2,"xl",s2,"xr",s1,"f(xl)",s2,"f(xr)");
   //printf("%d & %*.8f & %*.8f & %*.8f & %*.8f & %*.8f & %*.8f \\\\ \n",i,s1,xs[0],s2,xu[0],s2,xl[0],s2,xr[0],s2,fxl,s2,fxr);
-  printf("%s %s %*s %*s %*s %*s %*s\n","Iteration","xs",s2,"xu",s2,"xl",s2,"xr",s1,"f(xl)",s2,"f(xr)");
-  printf("%d %*.8f %*.8f %*.8f %*.8f %*.8f %*.8f \n",i,s1,xs[0],s2,xu[0],s2,xl[0],s2,xr[0],s2,fxl,s2,fxr);
-   */
+  printf("%s %s %*s %*s %*s\n","Iteration (i)","x_i",s2,"f(x_i)",s2,"g(x_i)",s3,"h(x_i)");
+  printf("%d %*.8f %*.8f %*.8f %*.8f\n",iter,s1,xc,s3,fxc,s3,gxc,s3,hxc);
   
   while (std::abs(gxc)>epsilon) {
     if (hxc>0.0) {
@@ -48,6 +48,8 @@ std::tuple<double, double>  newton_1d(double (*f)(double),double (*g)(double),do
     fxc=fxd;
     gxc=g(xc);
     hxc=h(xc);
+    iter+=1;
+    printf("%d %*.8f %*.8f %*.8f %*.8f\n",iter,s1,xc,s3,fxc,s3,gxc,s3,hxc);
   }
   return std::make_tuple(xc,fxc);
 }
