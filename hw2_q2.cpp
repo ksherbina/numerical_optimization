@@ -33,55 +33,23 @@ int main()
   a=1.0;
   b=4.0;
 
+  /*
   double f1=func2a(x0);
   printf("f1=%2.8f\n",f1);
   double g1=grad2a(x0);
   printf("g1=%2.8f\n",g1);
   double h1=hessian2a(x0);
   printf("h1=%2.8f\n",h1);
+   */
 
   std::cout<<"Minimize f(x,y)=x^3-3*x^2"<<std::endl;
   t=clock();
   std::cout<<"Running 1-Dimensional Newton's Method..."<<std::endl;
   
   std::tie(xn, fn)=newton_1d(func2a,grad2a,hessian2a,x0,a,b,epsilon,theta);
-  printf("The minimum of the function is %2.8f and occurs at %2.8f\n",xn,fn);
-  t=clock()-t;
-  printf ("Runtime of algorithm: %ld clicks (%f seconds).\n",t,((float)t)/CLOCKS_PER_SEC);
-  /*
-  //User specified parameters to run dichotomous search different from golden section search
-  error=2*pow(10.0,-2); //Interval of Uncertainty
-  delta=pow(10.0,-2); //Distinguishability constant for dichotomous search
-  
-  t=clock();
-  std::cout<<std::endl<<"Running Dichotomous Search..."<<std::endl;
-  ds=dichotomous_search(n,func1,x,a,b,d,error,delta);
-  printf("Final output = %2.8f\n",ds[0]);
-  t=clock()-t;
-  printf ("Runtime of algorithm: %ld clicks (%f seconds).\n",t,((float)t)/CLOCKS_PER_SEC);
-
-  //Problem 2b
-  x[0]=0.01;
-  a=0.04;
-  b=6;
-  error=pow(10.0,-4); //Interval of Uncertainty
-  std::cout<<std::endl<<"Minimize f(x)=(20/x)+x^2"<<std::endl;
-  t=clock();
-  std::cout<<"Running Golden Section Search..."<<std::endl;
-  gss=golden_section_search(n,func2,x,a,b,d,error);
-  printf("Final output = %2.8f\n",gss[0]);
+  printf("The minimum of the function over [%2.8f, %2.8f] is %2.8f and occurs at %2.8f\n",a,b,fn,xn);
   t=clock()-t;
   printf ("Runtime of algorithm: %ld clicks (%f seconds).\n",t,((float)t)/CLOCKS_PER_SEC);
   
-  error=2*pow(10.0,-2); //Interval of Uncertainty
-  delta=pow(10.0,-2); //Distinguishability constant for dichotomous search
-  
-  t=clock();
-  std::cout<<std::endl<<"Running Dichotomous Search..."<<std::endl;
-  ds=dichotomous_search(n,func2,x,a,b,d,error,delta);
-  printf("Final output = %2.8f\n",ds[0]);
-  t=clock()-t;
-  printf ("Runtime of algorithm: %ld clicks (%f seconds).\n",t,((float)t)/CLOCKS_PER_SEC);
-*/
   return 0;
 }
