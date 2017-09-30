@@ -20,13 +20,23 @@ valarray<double> grad1a(valarray<double> x) {
     g[1]=4.0*x[0]+8.0*x[1]-12.0;
     return g;
 }
-
+/*
+double func2(valarray<double> x) {
+  //user-defined function f such that f:R^n->R.
+  valarray<double> z = x;
+  for (int i=0;i<x.size();i++) {
+    z[i] = 1/x[i];
+  }
+  return (20*z+pow(x,2.0))[0];
+}
+*/
 int main()
 {
   clock_t t;
   int n=2; //User must specify number of dimensions
 
-  valarray<double> d(n),x0(n),ar1(n),ar2(n);
+  valarray<double> d(n), x0(n);
+  double ar1,ar2;
   double stepsize=1; 
   double eta=2.0;
   double theta=0.5;
@@ -46,10 +56,45 @@ int main()
   std::cout<<"Minimize f(x,y)=-12y+4x^2+4y^2+4xy"<<std::endl;
   t=clock();
   std::cout<<"Running Armijio's Rule Inexact Line Search..."<<std::endl;
-  ar1=armijo_rule(n,func1a,grad1a,x0,d,stepsize,eta,theta);
-  printf("Final output = [%2.8f %2.8f]\n",ar1[0],ar1[1]);
+  ar1=armijo_rule(n,func1a,g1a,x0,d,stepsize,eta,theta);
+  printf("Final output = %2.8f\n",ar1);
   t=clock()-t;
   printf ("Runtime of algorithm: %ld clicks (%f seconds).\n",t,((float)t)/CLOCKS_PER_SEC);
  
+  /*
+  //User specified parameters to run dichotomous search different from golden section search
+  error=2*pow(10.0,-2); //Interval of Uncertainty
+  delta=pow(10.0,-2); //Distinguishability constant for dichotomous search
+  
+  t=clock();
+  std::cout<<std::endl<<"Running Dichotomous Search..."<<std::endl;
+  ds=dichotomous_search(n,func1,x,a,b,d,error,delta);
+  printf("Final output = %2.8f\n",ds[0]);
+  t=clock()-t;
+  printf ("Runtime of algorithm: %ld clicks (%f seconds).\n",t,((float)t)/CLOCKS_PER_SEC);
+
+  //Problem 2b
+  x[0]=0.01;
+  a=0.04;
+  b=6;
+  error=pow(10.0,-4); //Interval of Uncertainty
+  std::cout<<std::endl<<"Minimize f(x)=(20/x)+x^2"<<std::endl;
+  t=clock();
+  std::cout<<"Running Golden Section Search..."<<std::endl;
+  gss=golden_section_search(n,func2,x,a,b,d,error);
+  printf("Final output = %2.8f\n",gss[0]);
+  t=clock()-t;
+  printf ("Runtime of algorithm: %ld clicks (%f seconds).\n",t,((float)t)/CLOCKS_PER_SEC);
+  
+  error=2*pow(10.0,-2); //Interval of Uncertainty
+  delta=pow(10.0,-2); //Distinguishability constant for dichotomous search
+  
+  t=clock();
+  std::cout<<std::endl<<"Running Dichotomous Search..."<<std::endl;
+  ds=dichotomous_search(n,func2,x,a,b,d,error,delta);
+  printf("Final output = %2.8f\n",ds[0]);
+  t=clock()-t;
+  printf ("Runtime of algorithm: %ld clicks (%f seconds).\n",t,((float)t)/CLOCKS_PER_SEC);
+*/
   return 0;
 }
