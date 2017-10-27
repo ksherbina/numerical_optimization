@@ -38,40 +38,48 @@ int comparison (int iter,double (*f)(valarray<double>),valarray<double> (*g)(val
   }
 }
 
-valarray<double> armijo_rule(int n,double (*f)(valarray<double>),valarray<double> (*g)(valarray<double>),valarray<double> x0,valarray<double> d, double a, double eta, double theta)
+valarray<double> armijo_rule(double (*f)(valarray<double>),valarray<double> (*g)(valarray<double>),valarray<double> x0,valarray<double> d, double a, double eta, double theta)
 {
   //User must supply the function f: R^n -> R and the gradient of the function g:R^n.
-  double alpha;
+  double alpha,descent;
   int t=1;
   alpha=a;
-  valarray<double> xc=x0;
+  valarray<double> xc,gx0;
   
-  std::cout<<std::endl;
-  printf("NOTE 1: x_i = x_{i-1}+(eta^j)^i*alpha*d where j is either 1 or -1 depending on whether\n");
-  printf("alpha is doubled or halved in that iteration i. \n");
-  printf("NOTE 2: r(x_{i-1}) = f(x_{i-1})+(eta^j)^i*alpha*grad*d where grad is the gradient of the objective.\n");
-  printf("function at x_{i-1}.\n");
+  gx0=g(x0);
+  xc=x0;
+  descent=std::inner_product(std::begin(gx0),std::end(gx0),std::begin(d),0.0);
+  //printf("Initial descent direction is %.8f",descent);
+  if (descent<0) {
+    std::cout<<std::endl;
+    printf("NOTE 1: x_i = x_{i-1}+(eta^j)^i*alpha*d where j is either 1 or -1 depending on whether\n");
+    printf("alpha is doubled or halved in that iteration i. \n");
+    printf("NOTE 2: r(x_{i-1}) = f(x_{i-1})+(eta^j)^i*alpha*grad*d where grad is the gradient of the objective.\n");
+    printf("function at x_{i-1}.\n");
   
-  std::cout<<std::endl;
-  int s1=8, s2=22, s3=29;
-  printf("%s %*s %*s %*s %*s \n","Iteration (i)",s1,"x_{i-1}",s2,"x_i",s3,"f(i)",s2,"r(x_{i-1})");
+    std::cout<<std::endl;
+    int s1=8, s2=22, s3=29;
+    printf("%s %*s %*s %*s %*s \n","Iteration (i)",s1,"x_{i-1}",s2,"x_i",s3,"f(i)",s2,"r(x_{i-1})");
   
-  if (comparison(t,f,g,xc,d,alpha,theta)==1) {
-    //std::cout<<"f(x_i) <= r(multiplier)"<<std::endl;
-    alpha=pow(eta,t)*alpha;
-    while (comparison(t,f,g,xc,d,alpha,theta)==0) {
-      t+=1;
+    if (comparison(t,f,g,xc,d,alpha,theta)==1) {
+      //std::cout<<"f(x_i) <= r(multiplier)"<<std::endl;
       alpha=pow(eta,t)*alpha;
-    }
-  } else {
-    //std::cout<<"f(x_i) > r(multiplier)"<<std::endl;
-    alpha=pow(1/eta,t)*alpha;
-    while (comparison(t,f,g,xc,d,alpha,theta)==0) {
-      t+=1;
+      while (comparison(t,f,g,xc,d,alpha,theta)==0) {
+        t+=1;
+        alpha=pow(eta,t)*alpha;
+      }
+    } else {
+      //std::cout<<"f(x_i) > r(multiplier)"<<std::endl;
       alpha=pow(1/eta,t)*alpha;
+      while (comparison(t,f,g,xc,d,alpha,theta)==0) {
+        t+=1;
+        alpha=pow(1/eta,t)*alpha;
+      }
     }
+    std::cout<<std::endl;
+    return xc;
+  } else {
+    printf("Current direction is not a descent direction");
+    return x0;
   }
-  std::cout<<std::endl;
-  
-  return xc;
 }
