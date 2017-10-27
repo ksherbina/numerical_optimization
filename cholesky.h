@@ -4,6 +4,11 @@
 #include <valarray>
 using std::valarray;
 
-double cholesky(valarray<double> A, int n, int fix);
+struct CholeskyFactors {
+    valarray<double> lower_triangular;
+    valarray<double> diagonal;
+};
+
+CholeskyFactors cholesky(valarray<double> A, int n, int fix);
  
 #endif

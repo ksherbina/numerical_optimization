@@ -14,11 +14,17 @@ matrix is positive definite.
 
 using std::valarray;
 
-double cholesky(valarray<double> A, int n, int fix)
+struct CholeskyFactors {
+    valarray<double> lower_triangular;
+    valarray<double> diagonal;
+};
+
+CholeskyFactors cholesky(valarray<double> A, int n, int fix)
 {
   /* The fix parameter is set to 1 to ensure that the diagonal entries D
   are sufficiently positive. Otherwise, D may not be positive definite.
   */
+  CholeskyFactors result;
   valarray<double> C (0.0,n*n), D (0.0,n*n), L (0.0,n*n);
   double sum1,sum2,theta;
   double delta=pow(10.0,-8);
@@ -59,11 +65,14 @@ double cholesky(valarray<double> A, int n, int fix)
       L[i*n+j]=C[i*n+j]/D[j];
     }
   }
+
+  result.lower_triangular=L;
+  result.diagonal=D;
   for (int i=0;i<n*n;i++) {
-      printf("lower triangular=%2.8f\n",L[i]);
+      printf("lower triangular=%2.8f\n",result.lower_triangular[i]);
   }
   for (int i=0;i<n;i++) {
-      printf("diagonal=%2.8f\n",D[i]);
+      printf("diagonal=%2.8f\n",result.diagonal[i]);
   }
-  return 0.0;
+  return result;
 }
