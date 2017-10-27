@@ -4,6 +4,6 @@
 #include <valarray>
 using std::valarray;
 
-double cholesky(valarray<double> A, int n);
+double cholesky(valarray<double> A, int n, int fix);
  
 #endif
