@@ -26,10 +26,10 @@ int main()
   clock_t t;
   int n=2; //User must specify number of dimensions
   
-  valarray<double> d(n), x0(n), ar1(n), ar2(n), ar3(n);
-  double stepsize=1;
-  double eta=2.0;
-  double theta=0.5;
+  valarray<double> d(n), x0(n);
+  double ar2,eta,theta;
+  eta=2.0;
+  theta=0.5;
   
   //TA's Problem 1b
   d={1.0,1.0};
@@ -37,8 +37,8 @@ int main()
   std::cout<<"Minimize objective function in problem 1b"<<std::endl;
   t=clock();
   std::cout<<"Running Armijio's Rule Inexact Line Search..."<<std::endl;
-  ar2=armijo_rule(func1b,grad1b,x0,d,stepsize,eta,theta);
-  printf("Final output = [%2.8f %2.8f]\n",ar2[0],ar2[1]);
+  ar2=armijo_rule(func1b,grad1b,x0,d,eta,theta);
+  printf("Final output = %2.8f \n",ar2);
   t=clock()-t;
   printf ("Runtime of algorithm: %ld clicks (%f seconds).\n",t,((float)t)/CLOCKS_PER_SEC);
   return 0;
