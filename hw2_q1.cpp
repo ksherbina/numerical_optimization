@@ -59,7 +59,7 @@ int main()
   std::cout<<"Minimize f(x,y)=-12y+4x^2+4y^2+4xy"<<std::endl;
   t=clock();
   std::cout<<"Running Armijio's Rule Inexact Line Search..."<<std::endl;
-  ar1=armijo_rule(n,func1a,grad1a,x0,d,stepsize,eta,theta);
+  ar1=armijo_rule(func1a,grad1a,x0,d,stepsize,eta,theta);
   printf("Final output = [%2.8f %2.8f]\n",ar1[0],ar1[1]);
   t=clock()-t;
   printf ("Runtime of algorithm: %ld clicks (%f seconds).\n",t,((float)t)/CLOCKS_PER_SEC);
@@ -70,7 +70,7 @@ int main()
   std::cout<<"Minimize objective function in problem 1b"<<std::endl;
   t=clock();
   std::cout<<"Running Armijio's Rule Inexact Line Search..."<<std::endl;
-  ar2=armijo_rule(n,func1b,grad1b,x0,d,stepsize,eta,theta);
+  ar2=armijo_rule(func1b,grad1b,x0,d,stepsize,eta,theta);
   printf("Final output = [%2.8f %2.8f]\n",ar2[0],ar2[1]);
   t=clock()-t;
   printf ("Runtime of algorithm: %ld clicks (%f seconds).\n",t,((float)t)/CLOCKS_PER_SEC);
@@ -80,7 +80,7 @@ int main()
   std::cout<<"Minimize objective function in problem 1b"<<std::endl;
   t=clock();
   std::cout<<"Running Armijio's Rule Inexact Line Search..."<<std::endl;
-  ar3=armijo_rule(n,func1b,grad1b,x0,d,stepsize,eta,theta);
+  ar3=armijo_rule(func1b,grad1b,x0,d,stepsize,eta,theta);
   printf("Final output = [%2.8f %2.8f]\n",ar3[0],ar3[1]);
   t=clock()-t;
   printf ("Runtime of algorithm: %ld clicks (%f seconds).\n",t,((float)t)/CLOCKS_PER_SEC);
