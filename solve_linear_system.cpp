@@ -38,8 +38,8 @@ valarray<double> solve_linear_system(CholeskyFactors factors, valarray<double> b
     }
     p[i] = y[i] - forwardsum;
   }
-  for (int k = 0; k < n; k++) {
-    std::cout<<"p["<<k<<"]="<<p[k]<<std::endl;
-  }
+  //for (int k = 0; k < n; k++) {
+  //  std::cout<<"p["<<k<<"]="<<p[k]<<std::endl;
+  //}
   return p;
 }

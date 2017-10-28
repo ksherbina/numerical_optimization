@@ -67,11 +67,11 @@ CholeskyFactors cholesky(valarray<double> A, int n, int fix) {
 
   result.lower_triangular = L;
   result.diagonal = D;
-  for (int i = 0; i < n * n; i++) {
-      printf("lower triangular=%2.8f\n", result.lower_triangular[i]);
-  }
-  for (int i = 0; i < n; i++) {
-      printf("diagonal=%2.8f\n", result.diagonal[i]);
-  }
+  //for (int i = 0; i < n * n; i++) {
+  //    printf("lower triangular=%2.8f\n", result.lower_triangular[i]);
+  //}
+  //for (int i = 0; i < n; i++) {
+  //    printf("diagonal=%2.8f\n", result.diagonal[i]);
+  //}
   return result;
 }
