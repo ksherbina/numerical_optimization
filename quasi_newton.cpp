@@ -33,6 +33,9 @@ valarray<double> newton_methods(double (*f)(valarray<double>),
   xk = x0;
   gxk = gradient(x0, dim, rosenbrock_parm);
   gradient_norm = std::sqrt(std::inner_product(std::begin(gxk), std::end(gxk), std::begin(gxk), 0.0));
+  for (int i = 0; i < gxk.size(); i++) {
+    printf("gx[%d] = %.8f \n", i, gxk[i]);
+  }
   
   while (gradient_norm > tolerance) {
     xc = xk;
@@ -52,6 +55,9 @@ valarray<double> newton_methods(double (*f)(valarray<double>),
     }
     xk = xc + alpha * direction;
     std::cout<<alpha<<std::endl;
+    for (int i = 0; i < direction.size(); i++) {
+      printf("d[%d] = %.8f \n", i, direction[i]);
+    }
     
     gxk = gradient(xk, dim, rosenbrock_parm);
     gradient_norm = std::sqrt(std::inner_product(std::begin(gxk), std::end(gxk), std::begin(gxk), 0.0));

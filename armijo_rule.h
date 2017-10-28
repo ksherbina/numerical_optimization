@@ -4,6 +4,7 @@
 #include <valarray>
 using std::valarray;
 
-double armijo_rule(double (*f)(valarray<double>),valarray<double> (*g)(valarray<double>),valarray<double> x0,valarray<double> d, double eta, double theta);
+double armijo_rule(double (*f)(valarray<double>), valarray<double> gradient, valarray<double> x0,
+                   valarray<double> direction, double eta, double theta);
  
 #endif

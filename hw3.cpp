@@ -12,11 +12,14 @@
 #include "cholesky.h"
 #include "solve_linear_system.h"
 #include "newton_methods.h"
+#include "armijo_rule.h"
 
-double rosenbrock(valarray<double> x, int n, double alpha) {
+double rosenbrock100(valarray<double> x) {
   //n must be even
   //alpha is a user-specified parameter (ex. 1 or 100)
   double value = 0.0;
+  int n = 2;
+  double alpha = 100.0;
   double first_term, second_term;
   for (int i = 0; i < n / 2; i++) {
     first_term = (x[2 * i + 1]-(x[2 * i] * x[2 * i]))*(x[2 * i + 1]-(x[2 * i] * x[2 * i]));
@@ -57,16 +60,17 @@ int main() {
   int ncol = 3;
   CholeskyFactors check_chol;
   double check_function;
-  valarray<double> check_solv, check_derivative, check_hessian, check_newton;
+  valarray<double> check_solv, check_derivative, check_hessian, do_newton1, do_newton2;
   valarray<double> M = { 2.0, -1.0, 1.0, -1.0, 3.0, 0.0, 1.0, 0.0, 5.0 };
   valarray<double> b = { 1.0, -2.0, 3.0 };
-  valarray<double> initial_point = { -1.0, -1.0 };
+  //valarray<double> initial_point = { -1.0, -1.0 };
+  valarray<double> initial_point = { -1.2, -1.2 };
   double epsilon = pow(10.0, -6);
-  double alpha = 100.0;
+  double alpha = 1.0;
   
   check_chol = cholesky(M, ncol, 0);
   check_solv = solve_linear_system(check_chol, b, ncol);
-  check_function = rosenbrock(initial_point, 2, alpha);
+  check_function = rosenbrock100(initial_point);
   std::cout<<"Initial Rosenbrock function value = "<<check_function<<std::endl;
   check_derivative = rosenbrock_gradient(initial_point, 2, alpha);
   for (int i = 0; i < check_derivative.size(); i++) {
@@ -77,10 +81,23 @@ int main() {
     printf("f''[%d] = %.8f \n", i, check_hessian[i]);
   }
   
-  check_newton = newton_methods(rosenbrock, rosenbrock_gradient, rosenbrock_hessian,
-                                alpha, initial_point, ncol, epsilon, 0, 0);
+  //Pure Netwon
+  std::cout<<"Pure Netwon"<<std::endl;
+  do_newton1 = newton_methods(rosenbrock100, rosenbrock_gradient, rosenbrock_hessian,
+                                alpha, initial_point, ncol, epsilon, 1, 0);
   
-  std::cout<<std::numeric_limits<double>::epsilon()<<std::endl;
+  for (int i = 0; i < do_newton1.size(); i++) {
+    printf("x[%d] = %.8f \n", i, do_newton1[i]);
+  }
+  
+  //Modified Newton
+  std::cout<<"Modified Netwon"<<std::endl;
+  do_newton2 = newton_methods(rosenbrock100, rosenbrock_gradient, rosenbrock_hessian,
+                              alpha, initial_point, ncol, epsilon, 1, 1);
+  for (int i = 0; i < do_newton2.size(); i++) {
+    printf("x[%d] = %.8f \n", i, do_newton2[i]);
+  }
+  //std::cout<<std::numeric_limits<double>::epsilon()<<std::endl;
   
   return 0;
 }
