@@ -11,6 +11,7 @@
 #include <iterator>
 #include "cholesky.h"
 #include "solve_linear_system.h"
+#include "newton_methods.h"
 
 double rosenbrock(valarray<double> x, int n, double alpha) {
   //n must be even
@@ -56,11 +57,11 @@ int main() {
   int ncol = 3;
   CholeskyFactors check_chol;
   double check_function;
-  valarray<double> check_solv, check_derivative, check_hessian;
+  valarray<double> check_solv, check_derivative, check_hessian, check_newton;
   valarray<double> M = { 2.0, -1.0, 1.0, -1.0, 3.0, 0.0, 1.0, 0.0, 5.0 };
   valarray<double> b = { 1.0, -2.0, 3.0 };
   valarray<double> initial_point = { -1.0, -1.0 };
-  
+  double epsilon = pow(10.0, -6);
   check_chol = cholesky(M, ncol, 0);
   check_solv = solve_linear_system(check_chol, b, ncol);
   check_function = rosenbrock(initial_point, 2, 100.0);
@@ -73,11 +74,9 @@ int main() {
   for (int i = 0; i < check_hessian.size(); i++) {
     printf("f''[%d] = %.8f \n", i, check_hessian[i]);
   }
-  /*
-  check_newton = newton_methods(double (*function)(valarray<double>),valarray<double> (*gradient)(valarray<double>),
-                                valarray<double> (*hessian)(valarray<double>), valarray<double> x0, int dim,
-                                double tolerance, bool modify_diagonal, bool do_linesearch);
-  */
+  
+  check_newton = newton_methods(epsilon);
+  
   std::cout<<std::numeric_limits<double>::epsilon()<<std::endl;
   
   return 0;
