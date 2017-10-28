@@ -62,21 +62,23 @@ int main() {
   valarray<double> b = { 1.0, -2.0, 3.0 };
   valarray<double> initial_point = { -1.0, -1.0 };
   double epsilon = pow(10.0, -6);
+  double alpha = 100.0;
+  
   check_chol = cholesky(M, ncol, 0);
   check_solv = solve_linear_system(check_chol, b, ncol);
-  check_function = rosenbrock(initial_point, 2, 100.0);
+  check_function = rosenbrock(initial_point, 2, alpha);
   std::cout<<"Initial Rosenbrock function value = "<<check_function<<std::endl;
-  check_derivative = rosenbrock_gradient(initial_point, 2, 100.0);
+  check_derivative = rosenbrock_gradient(initial_point, 2, alpha);
   for (int i = 0; i < check_derivative.size(); i++) {
     printf("f'[%d] = %.8f \n", i, check_derivative[i]);
   }
-  check_hessian = rosenbrock_hessian(initial_point, 2, 100.0);
+  check_hessian = rosenbrock_hessian(initial_point, 2, alpha);
   for (int i = 0; i < check_hessian.size(); i++) {
     printf("f''[%d] = %.8f \n", i, check_hessian[i]);
   }
   
   check_newton = newton_methods(rosenbrock, rosenbrock_gradient, rosenbrock_hessian,
-                                initial_point, ncol, epsilon, 0, 0);
+                                alpha, initial_point, ncol, epsilon, 0, 0);
   
   std::cout<<std::numeric_limits<double>::epsilon()<<std::endl;
   
