@@ -14,63 +14,58 @@ to minimize a function.
 
 using std::valarray;
 
-int comparison (int iter,double (*f)(valarray<double>),const double& grad,const valarray<double>& xc,const valarray<double>& p, double multiplier, double th)
-{
-  double fxc,lc,fxk;
+int comparison (int iter, double (*f)(valarray<double>), const double& derivative, const valarray<double>& xc,
+                const valarray<double>& d, double steplength, double theta) {
+  double fxc, lc, fxk;
   valarray<double> xk;
-  fxc=f(xc);
-  lc=fxc+multiplier*th*grad;
-  xk=xc+(multiplier*p);
-  fxk=f(xk);
+  fxc = f(xc);
+  lc = fxc + theta * steplength * derivative;
+  xk = xc + steplength * d;
+  fxk = f(xk);
 
-  int s1=16;
+  int s1 = 18;
   //printf("%d & %*.8f & %*.8f & %*.8f & %*.8f & %*.8f & %*.8f \\\\ \n",i,s1,xs[0],s2,xu[0],s2,xl[0],s2,xr[0],s2,fxl,s2,fxr);
   //printf("%d & [%.8f %.8f] & [%.8f %.8f] & %.8f & %.8f \\\\ \n",iter,xc[0],xc[1],xk[0],xk[1],fxc,lc);
-  printf("%d %.8f %*.8f %*.8f\n",iter,multiplier,s1,fxk,s1,lc);
+  printf("%d %*.8f %*.8f %*.8f\n", iter, s1, steplength, s1, fxk, s1, lc);
   
-  if (fxk<=lc) {
+  if (fxk <= lc) {
     return 1;
   } else {
     return 0;
   }
 }
 
-double armijo_rule(double (*f)(valarray<double>),valarray<double> (*g)(valarray<double>),valarray<double> x0,valarray<double> d, double eta, double theta)
-{
+double armijo_rule(double (*f)(valarray<double>), valarray<double> gradient, valarray<double> x0,
+                   valarray<double> direction, double eta, double theta) {
   //User must supply the function f: R^n -> R and the gradient of the function g:R^n.
-  double alpha,step,descent;
-  int t=1;
-  valarray<double> gx0;
+  double alpha, step, descent;
+  int counter = 1;
   
-  alpha=1.0;
-  gx0=g(x0);
-  descent=std::inner_product(std::begin(gx0),std::end(gx0),std::begin(d),0.0);
-  //printf("Initial descent direction is %.8f",descent);
-  if (descent<0) {
+  alpha = 1.0;
+  descent = std::inner_product(std::begin(gradient), std::end(gradient), std::begin(direction), 0.0);
+  
+  int s2 = 10;
+  int s3 = 24;
+
+  if (descent < 0) {
     printf("NOTE: LH is the left hand side of Armijo's rule and RH is the right hand side\n");
-    printf("%s %s %s %s\n","Iteration","Steplength","LH","RH");
-    if (comparison(t,f,descent,x0,d,alpha,theta)==1) {
-      printf("Double stepsize");
-      step=pow(eta,t)*alpha;
-      while (comparison(t,f,descent,x0,d,step,theta)==0) {
-        alpha=step;
-        step=pow(eta,t)*alpha;
-        t+=1;
+    printf("%s %*s %*s %*s\n","Iteration", s2, "Steplength", s2, "LH", s3, "RH");
+    if (comparison(counter, f, descent, x0, direction, alpha, theta) == 1) {
+      step = pow(eta, counter) * alpha;
+      while (comparison(counter+1, f, descent, x0, direction, step, theta) == 1) {
+        alpha = step;
+        step = pow(eta, counter) * alpha;
+        counter++;
       }
     } else {
-      //std::cout<<"f(x_i) > r(multiplier)"<<std::endl;
-      printf("Halve stepsize");
-      step=pow(1/eta,t)*alpha;
-      printf("Current step size=%.8f",step);
-      while (comparison(t,f,descent,x0,d,step,theta)==0) {
-        alpha=step;
-        step=pow(1/eta,t)*alpha;
-        t+=1;
-        std::cout<<step<<std::endl;
+      alpha = pow(1.0/eta, counter) * alpha;
+      while (comparison(counter+1, f, descent, x0, direction, alpha, theta) == 0) {
+        alpha = pow(1.0/eta, counter) * alpha;
+        counter++;
       }
     }
-    printf("Acceptable steplength: %.8f",step);
-    return step;
+    return alpha;
+    
   } else {
     printf("Current direction is not a descent direction");
     return 0.0;
