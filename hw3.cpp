@@ -75,7 +75,8 @@ int main() {
     printf("f''[%d] = %.8f \n", i, check_hessian[i]);
   }
   
-  check_newton = newton_methods(epsilon);
+  check_newton = newton_methods(rosenbrock, rosenbrock_gradient, rosenbrock_hessian,
+                                initial_point, ncol, epsilon, 0, 0);
   
   std::cout<<std::numeric_limits<double>::epsilon()<<std::endl;
   
