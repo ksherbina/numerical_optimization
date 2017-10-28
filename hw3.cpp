@@ -16,8 +16,7 @@ double rosenbrock(valarray<double> x, int n, double alpha) {
   //n must be even
   //alpha is a user-specified parameter (ex. 1 or 100)
   double value = 0.0;
-  double first_term;
-  double second_term;
+  double first_term, second_term;
   for (int i = 0; i < n / 2; i++) {
     first_term = (x[2 * i + 1]-(x[2 * i] * x[2 * i]))*(x[2 * i + 1]-(x[2 * i] * x[2 * i]));
     second_term = (1.0 - x[2 * i]) * (1.0 - x[2 * i]);
@@ -25,6 +24,20 @@ double rosenbrock(valarray<double> x, int n, double alpha) {
   }
   return value;
 }
+
+valarray<double> rosenbrock_gradient(valarray<double> x, int n, double alpha) {
+  //n must be even
+  //alpha is a user-specified parameter (ex. 1 or 100)
+  valarray<double> value(0.0, n);
+  for (int i = 0; i < n / 2; i++) {
+    value[0] = -4.0 * alpha * (x[2 * i + 1] - (x[2 * i] * x[2 * i])) * x[2 * i] - 2.0 * (1 - x[2 * i]) + value[0];
+    value[1] = x[2 * i + 1] - (x[2 * i] * x[2 * i]) + value[1];
+    std::cout<<value[1]<<std::endl;
+  }
+  value[1] = 2.0 * alpha * value[1];
+  return value;
+}
+
 
 valarray<double> grad1a(valarray<double> x) {
   //gradient of func1a; in R^n
@@ -39,7 +52,7 @@ int main() {
   int ncol = 3;
   CholeskyFactors check_chol;
   double check_function;
-  valarray<double> check_solv, check_newton;
+  valarray<double> check_solv, check_derivative;
   valarray<double> M = { 2.0, -1.0, 1.0, -1.0, 3.0, 0.0, 1.0, 0.0, 5.0 };
   valarray<double> b = { 1.0, -2.0, 3.0 };
   valarray<double> initial_point = { -1.0, -1.0 };
@@ -48,6 +61,10 @@ int main() {
   check_solv = solve_linear_system(check_chol, b, ncol);
   check_function = rosenbrock(initial_point, 2, 100.0);
   std::cout<<"Initial Rosenbrock function value = "<<check_function<<std::endl;
+  check_derivative = rosenbrock_gradient(initial_point, 2, 100.0);
+  for (int i = 0; i < check_derivative.size(); i++) {
+    printf("f'[%d] = %.8f \t", i, check_derivative[i]);
+  }
   /*
   check_newton = newton_methods(double (*function)(valarray<double>),valarray<double> (*gradient)(valarray<double>),
                                 valarray<double> (*hessian)(valarray<double>), valarray<double> x0, int dim,
