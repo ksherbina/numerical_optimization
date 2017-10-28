@@ -15,33 +15,34 @@ direction.
 
 using std::valarray;
 
-valarray<double> newton_direction(double (*f)(valarray<double>),valarray<double> (*gradient)(valarray<double>),valarray<double> (*hessian)(valarray<double>),valarray<double> x0, int dim, double epsilon, int modify_diagonal, int linesearch)
+valarray<double> newton_direction(double (*function)(valarray<double>),valarray<double> (*gradient)(valarray<double>),valarray<double> (*hessian)(valarray<double>),valarray<double> x0, int dim, double epsilon, bool modify_diagonal, bool do_linesearch)
 {
   valarray<double> d, h, gxk, xk, xc;
   CholeskyFactors hxc;
   double alpha;
   valarray<double> eps (epsilon,dim);   
-  int k=1;
+  int counter=1;
   xk=x0;
-  gxk=g(xk);
+  gxk=gradient(xk);
   
   while (std::abs(gxk)>eps) {
     xc=xk;
     h=hessian(xc);
-    hxc=cholesky(h, dim, moidfy_diagonal);
-    if (modify_diagonal == 1) {
+    hxc=cholesky(h, dim, modify_diagonal);
+    if (modify_diagonal) {
       d = solve_linear_system(hxc,-1*gxk,dim);
     } else {
     // Must check if Hessian is positive definite. If not, take 
     // steepest descent direction rather than newton direction
     }
-    if (linesearch==1) {
-      alpha=armijo_rule(f,gradient,xc,d,2.0,0.5);
+    if (linesearch) {
+      alpha=armijo_rule(function,gradient,xc,d,2.0,0.5);
     } else {
       alpha=1.0;
     }
     xk=xc+alpha*d;
-    gxk=g(xk);
+    gxk=gradient(xk);
+    counter+=1;
   }
   return d;
 }
