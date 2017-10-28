@@ -38,13 +38,17 @@ valarray<double> rosenbrock_gradient(valarray<double> x, int n, double alpha) {
   return value;
 }
 
-
-valarray<double> grad1a(valarray<double> x) {
-  //gradient of func1a; in R^n
-  valarray<double> g (2);
-  g[0]=8.0*x[0]+4.0*x[1];
-  g[1]=4.0*x[0]+8.0*x[1]-12.0;
-  return g;
+valarray<double> rosenbrock_hessian(valarray<double> x, int n, double alpha) {
+  //n must be even
+  //alpha is a user-specified parameter (ex. 1 or 100)
+  valarray<double> value(0.0, n*n);
+  for (int i = 0; i < n / 2; i++) {
+    value[0] = 4.0 * alpha * (x[2 * i + 1] - 3.0 * (x[2 * i] * x[2 * i])) + 2.0 + value[0];
+    value[1] = 4.0 * alpha * x[2 * i + 1] + value[1];
+    value[2] = 4.0 * alpha * x[2 * i] + value[2];
+  }
+  value[3] = -2.0 * alpha;
+  return value;
 }
 
 
@@ -52,7 +56,7 @@ int main() {
   int ncol = 3;
   CholeskyFactors check_chol;
   double check_function;
-  valarray<double> check_solv, check_derivative;
+  valarray<double> check_solv, check_derivative, check_hessian;
   valarray<double> M = { 2.0, -1.0, 1.0, -1.0, 3.0, 0.0, 1.0, 0.0, 5.0 };
   valarray<double> b = { 1.0, -2.0, 3.0 };
   valarray<double> initial_point = { -1.0, -1.0 };
@@ -63,7 +67,11 @@ int main() {
   std::cout<<"Initial Rosenbrock function value = "<<check_function<<std::endl;
   check_derivative = rosenbrock_gradient(initial_point, 2, 100.0);
   for (int i = 0; i < check_derivative.size(); i++) {
-    printf("f'[%d] = %.8f \t", i, check_derivative[i]);
+    printf("f'[%d] = %.8f \n", i, check_derivative[i]);
+  }
+  check_hessian = rosenbrock_hessian(initial_point, 2, 100.0);
+  for (int i = 0; i < check_hessian.size(); i++) {
+    printf("f''[%d] = %.8f \n", i, check_hessian[i]);
   }
   /*
   check_newton = newton_methods(double (*function)(valarray<double>),valarray<double> (*gradient)(valarray<double>),
