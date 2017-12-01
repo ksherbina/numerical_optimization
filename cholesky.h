@@ -9,6 +9,6 @@ struct CholeskyFactors {
     valarray<double> diagonal;
 };
 
-CholeskyFactors cholesky(valarray<double> A, int n, int fix);
+CholeskyFactors cholesky(valarray<double> A, int n);
  
 #endif
