@@ -4,6 +4,6 @@
 #include <valarray>
 using std::valarray;
 
-valarray<double>  steepest_descent(double (*f)(valarray<double>), valarray<double> (*g)(valarray<double>), valarray<double> x0, double epsilon);
+valarray<double>  steepest_descent(double (*f)(valarray<double>), valarray<double> (*g)(valarray<double>), valarray<double> x0, double epsilon, int MAX_ITER);
 
 #endif

@@ -11,7 +11,7 @@
 
 using std::valarray;
 
-valarray<double> steepest_descent(double (*f)(valarray<double>), valarray<double> (*g)(valarray<double>), valarray<double> x0, double epsilon) {
+valarray<double> steepest_descent(double (*f)(valarray<double>), valarray<double> (*g)(valarray<double>), valarray<double> x0, double epsilon, int MAX_ITER) {
 
   int k = 0;  
   double fx, stepsize, gnorm, a, b;
@@ -39,7 +39,7 @@ valarray<double> steepest_descent(double (*f)(valarray<double>), valarray<double
     gx = g(x);
     gnorm = std::sqrt(std::inner_product(std::begin(gx), std::end(gx), std::begin(gx), 0.0));
     k++;
-    if (k > 20) {
+    if (k > MAX_ITER) {
       printf("Maximum iterations exceeded");
       break;
     }

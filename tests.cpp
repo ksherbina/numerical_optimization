@@ -41,7 +41,7 @@ int main()
   testx = {-4.0, -2.0};
   double lx = -1.0;
   double rx = 2.0;
-  check_sd = steepest_descent(testf1, test_gradient1, testx, pow(10.0,-3));
+  check_sd = steepest_descent(testf1, test_gradient1, testx, pow(10.0,-3), 50);
   
   /*
   double a = 0.4;
