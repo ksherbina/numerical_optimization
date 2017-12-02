@@ -33,9 +33,9 @@ int main()
   theta = 0.5;
   
   //TA's Problem 1b
-  d = { -1.0, -1.0 };
-  //x0 = { 1.0, 1.0 };
-  x0 = { 3.0, 3.0 };
+  d = { 1.0, 1.0 };
+  x0 = { 1.0, 1.0 };
+  //x0 = { 3.0, 3.0 };
   initial_gradient = grad1b(x0);
   std::cout<<"Minimize objective function in problem 1b"<<std::endl;
   t = clock();
