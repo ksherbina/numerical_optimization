@@ -10,6 +10,7 @@
 #include "golden_section_search.h"
 #include "solve_linear_system.h"
 #include "newton.h"
+#include "quasi_newton.h"
 #include "armijo_rule.h"
 
 using std::valarray;
@@ -40,8 +41,8 @@ int main()
 {
  
   int n=3;
-  double sum, pure_newton_eval, sd_eval;
-  valarray<double> solv1, check, testx, pure_newton;
+  double sum, modified_newton_eval, sd_eval;
+  valarray<double> solv1, check, testx, modified_newton, dfp, bfgs;
   valarray<double> M {2.0,-1.0,1.0,-1.0,3.0,0.0,1.0,0.0,5.0};
   CholeskyFactors chol1, chol2;
   chol1=cholesky(M,n);
@@ -96,15 +97,29 @@ int main()
   */
   std::cout<<std::numeric_limits<double>::epsilon()<<std::endl;
 
+  std::cout<<"Check modified newton:"<<std::endl;
   testx = {-4.0, -2.0};
-  pure_newton = newton(testx, testf1, test_gradient1, test_hessian1, pow(10.0,-3), "modified", "armijo", 50);
-  pure_newton_eval = testf1(pure_newton);
-  std::cout<<"Minimum = "<<pure_newton_eval<<std::endl;
+  modified_newton = newton(testx, testf1, test_gradient1, test_hessian1, pow(10.0,-3), "modified", "armijo", 50);
+  modified_newton_eval = testf1(modified_newton);
+  std::cout<<"Minimum = "<<modified_newton_eval<<std::endl;
   std::cout<<"which occurs at the point "<<std::endl;
-  for (int j = 0; j < pure_newton.size(); j++) {
-    std::cout<<pure_newton[j]<<std::endl;
+  for (int j = 0; j < modified_newton.size(); j++) {
+    std::cout<<modified_newton[j]<<std::endl;
   }
 
+  std::cout<<"Check DFP:"<<std::endl;
+  dfp = quasi_newton(testx, testf1, test_gradient1, pow(10.0,-3), "dfp", "armijo", 50);
+  //std::cout<<"Check BFGS:"<<std::endl;
+  //bfgs = quasi_newton(testx, testf1, test_gradient1, pow(10.0,-3), "bfgs", "armijo", 50);
+  /*
+  dfp_eval = testf1(dfp_newton);
+  std::cout<<"Minimum = "<<dfp_eval<<std::endl;
+  std::cout<<"which occurs at the point "<<std::endl;
+  for (int j = 0; j < dfp.size(); j++) {
+    std::cout<<dfp[j]<<std::endl;
+  }
+  */
+  /*
   valarray<double> check_sd;
   double lx = -1.0;
   double rx = 2.0;
@@ -115,12 +130,6 @@ int main()
   for (int j = 0; j < check_sd.size(); j++) {
     std::cout<<check_sd[j]<<std::endl;
   }
-
-  /*
-  double a = 0.4;
-  double b = 1.5;
-  double d = 
-  gss=golden_section_search(n,func1,x,a,b,d,error);
   */
   return 0;
 }
