@@ -72,6 +72,7 @@ CholeskyFactors cholesky(valarray<double> A, int n) {
 
   result.lower_triangular = L;
   result.diagonal = D;
+  /*
   std::cout<<"Size of D = "<<D.size()<<std::endl;
   for (int i = 0; i < n * n; i++) {
       printf("lower triangular=%2.8f\n", result.lower_triangular[i]);
@@ -80,5 +81,6 @@ CholeskyFactors cholesky(valarray<double> A, int n) {
       std::cout<<"i = "<<i<<std::endl;
       printf("diagonal=%2.8f\n", result.diagonal[i]);
   }
+  */
   return result;
 }
