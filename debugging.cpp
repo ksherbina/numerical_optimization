@@ -109,8 +109,8 @@ int main()
 
   std::cout<<"Check DFP:"<<std::endl;
   dfp = quasi_newton(testx, testf1, test_gradient1, pow(10.0,-3), "dfp", "armijo", 50);
-  //std::cout<<"Check BFGS:"<<std::endl;
-  //bfgs = quasi_newton(testx, testf1, test_gradient1, pow(10.0,-3), "bfgs", "armijo", 50);
+  std::cout<<"Check BFGS:"<<std::endl;
+  bfgs = quasi_newton(testx, testf1, test_gradient1, pow(10.0,-3), "bfgs", "armijo", 50);
   /*
   dfp_eval = testf1(dfp_newton);
   std::cout<<"Minimum = "<<dfp_eval<<std::endl;
@@ -119,7 +119,7 @@ int main()
     std::cout<<dfp[j]<<std::endl;
   }
   */
-  /*
+  std::cout<<"Check Steepest Descent:"<<std::endl;
   valarray<double> check_sd;
   double lx = -1.0;
   double rx = 2.0;
@@ -130,6 +130,6 @@ int main()
   for (int j = 0; j < check_sd.size(); j++) {
     std::cout<<check_sd[j]<<std::endl;
   }
-  */
+
   return 0;
 }
