@@ -46,13 +46,18 @@ int main()
   chol2=cholesky(I,n);
 
   std::cout<<"Check matrix by vector mulitplication:"<<std::endl;
+  valarray<double> prod(0.0, solv1.size());
   for (int j = 0; j < M.size(); j += solv1.size()) {
     sum = 0.0;
     for (int k = 0; k < solv1.size(); k++) {
       std::cout<<"j = "<<j<<" and k = "<<k<<std::endl;
       sum += (M[j + k] * solv1[k]);
     }
-    printf("solution=%2.8f\n", sum);
+    prod[j/solv1.size()] = sum;
+    //printf("solution=%2.8f\n", sum);
+  }
+  for (int i = 0; i < prod.size(); i++) {
+    printf("solution=%2.8f\n", prod[i]);
   }
 
   std::cout<<"Check multiply_vector_by_its_transpose:"<<std::endl;
