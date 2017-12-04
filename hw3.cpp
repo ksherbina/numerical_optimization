@@ -11,7 +11,7 @@
 #include <iterator>
 #include "cholesky.h"
 #include "solve_linear_system.h"
-#include "newton_methods.h"
+#include "newton.h"
 #include "armijo_rule.h"
 
 using std::valarray; 
@@ -82,10 +82,11 @@ int main() {
     printf("f''[%d] = %.8f \n", i, check_hessian[i]);
   }
   
+/*
   //Modified Netwon
   std::cout<<"Modified Netwon"<<std::endl;
-  pure_newton = newton_methods(initial_point, rosenbrock, rosenbrock_gradient, rosenbrock_hessian, epsilon, "modified", "armijo", 50); 
-  
+  pure_newton = newton(initial_point, rosenbrock, rosenbrock_gradient, rosenbrock_hessian, epsilon, "modified", "armijo", 50); 
+  */
   return 0;
 }
 
