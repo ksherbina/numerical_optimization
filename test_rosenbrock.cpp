@@ -65,7 +65,7 @@ int main()
   valarray<double> sd, modified_newton;
   valarray<double> testx = { -1.2, -1.2 };
  
-  sd = steepest_descent(rosenbrock, rosenbrock_gradient, testx, pow(10.0,-3), 100);
-  modified_newton = newton(testx, rosenbrock, rosenbrock_gradient, rosenbrock_hessian, pow(10.0,-3), "modified", "armijo", 100);
+  sd = steepest_descent(rosenbrock, rosenbrock_gradient, testx, pow(10.0,-2), 200);
+  modified_newton = newton(testx, rosenbrock, rosenbrock_gradient, rosenbrock_hessian, pow(10.0,-2), "modified", "armijo", 200);
   return 0;
 }

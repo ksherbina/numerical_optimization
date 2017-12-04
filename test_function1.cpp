@@ -76,7 +76,7 @@ valarray<double> test_hessian(valarray<double> x) {
 
 int main()
 {
-  valarray<double> sd, testx(0.0, 10);
+  valarray<double> sd, modified_newton, testx(0.0, 10);
   testx[0] = -1.2;
  
   for (int i = 0; i < 3; i++) {
@@ -84,7 +84,8 @@ int main()
     check = static_cast<double>(i);
     printf("solution=%2.8f\n", check);
   }
-  sd = steepest_descent(test_func, test_gradient, testx, pow(10.0,-3), 100);
+  sd = steepest_descent(test_func, test_gradient, testx, pow(10.0,-3), 200);
+  modified_newton = newton(testx, test_func, test_gradient, test_hessian, pow(10.0,-3), "modified", "armijo", 200);
 
   return 0;
 }
