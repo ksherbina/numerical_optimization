@@ -29,7 +29,7 @@ valarray<double> newton(valarray<double> x0, double (*func)(valarray<double>), v
   valarray<double> x, gx, gx0, hx, d;
   CholeskyFactors hxc;
   Armijo steps;
-  double gradient_norm, stepsize;
+  double gradient_norm, stepsize, fx;
 
   int func_evals = 0;
   int counter = 0;
@@ -47,16 +47,23 @@ valarray<double> newton(valarray<double> x0, double (*func)(valarray<double>), v
   std::cout<<"Check direction: "<<scalar_product_of_two_vectors(gx, d)<<std::endl;
   */
 
+  int s1=22,s2=16,s3=14;
+  printf("%s %s %*s %*s %*s \n","Iteration (i)", "x_i[0]", s2, "x_i[1]", s2, "f(x_i)", s2, "norm of gradient");
+
   while (gradient_norm > epsilon) {
+    fx = func(x);
+    printf("%d %*.8f %*.8f %*.8f %*.8f \n", counter, s1, x[0], s3, x[1], s3, fx, s3, gradient_norm);
     hx = hess(x);
     hxc = cholesky(hx, x.size());
     d = solve_linear_system(hxc, -gx, gx.size());
+    /*
     for (int i = 0; i < gx.size(); i++) {
       printf("gx=%2.8f\n", gx[i]);
     }
     for (int i = 0; i < d.size(); i++) {
       printf("d=%2.8f\n", d[i]);
     }
+    */
     if (scalar_product_of_two_vectors(gx, d) < 0.0) {
       x0 = x;
       gx0 = gx;
@@ -76,7 +83,7 @@ valarray<double> newton(valarray<double> x0, double (*func)(valarray<double>), v
     }
     counter += 1;
     if (counter > MAX_ITER) {
-      printf("Maximum iterations exceeded");
+      printf("Maximum iterations exceeded \n");
       break;
     }
   }
