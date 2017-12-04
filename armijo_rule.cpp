@@ -31,9 +31,7 @@ int comparison (int iter, double (*f)(valarray<double>), const double& derivativ
   fxk = f(xk);
 
   int s1 = 18;
-  //printf("%d & %*.8f & %*.8f & %*.8f & %*.8f & %*.8f & %*.8f \\\\ \n",i,s1,xs[0],s2,xu[0],s2,xl[0],s2,xr[0],s2,fxl,s2,fxr);
-  //printf("%d & [%.8f %.8f] & [%.8f %.8f] & %.8f & %.8f \\\\ \n",iter,xc[0],xc[1],xk[0],xk[1],fxc,lc);
-  printf("%d %*.8f %*.8f %*.8f\n", iter, s1, steplength, s1, fxk, s1, lc);
+  //printf("%d %*.8f %*.8f %*.8f\n", iter, s1, steplength, s1, fxk, s1, lc);
   
   if (fxk <= lc) {
     return 1;
@@ -57,8 +55,8 @@ Armijo armijo_rule(double (*f)(valarray<double>), valarray<double> gradient, val
   int s3 = 24;
 
   if (descent < 0) {
-    printf("NOTE: LH is the left hand side of Armijo's rule and RH is the right hand side\n");
-    printf("%s %*s %*s %*s\n","Iteration", s2, "Steplength", s2, "LH", s3, "RH");
+    //printf("NOTE: LH is the left hand side of Armijo's rule and RH is the right hand side\n");
+    //printf("%s %*s %*s %*s\n","Iteration", s2, "Steplength", s2, "LH", s3, "RH");
     if (comparison(counter, f, descent, x0, direction, alpha, theta) == 1) {
       function_evaluations += 1;
       step = pow(eta, counter) * alpha;
