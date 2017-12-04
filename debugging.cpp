@@ -9,8 +9,11 @@
 #include "steepest_descent.h"
 #include "golden_section_search.h"
 #include "solve_linear_system.h"
+#include "newton.h"
+#include "armijo_rule.h"
 
 using std::valarray;
+using std::string;
 
 double testf1(valarray<double> x) {
     //user-defined function f such that f:R^n->R.
@@ -24,18 +27,27 @@ valarray<double> test_gradient1(valarray<double> x) {
     return soln;
 }
 
+valarray<double> test_hessian1(valarray<double> x) {
+  valarray<double> soln(x.size() * x.size());
+  soln[0] = x[1];
+  soln[1] = 2.0 * x[0];
+  soln[2] = 1.0;
+  soln[3] = (2.0 / 5.0) + 3.0*sin(x[1]);
+}
+
 
 int main()
 {
  
   int n=3;
-  double sum;
-  valarray<double> solv1, check;
+  double sum, pure_newton_eval, sd_eval;
+  valarray<double> solv1, check, testx, pure_newton;
   valarray<double> M {2.0,-1.0,1.0,-1.0,3.0,0.0,1.0,0.0,5.0};
   CholeskyFactors chol1, chol2;
   chol1=cholesky(M,n);
   valarray<double> b {1.0,-2.0,3.0};
   solv1 = solve_linear_system(chol1,b,n);
+  /*
   std::cout<<"Check solve_linear_system()"<<std::endl;
   for (int i=0;i<n;i++) {
       printf("solution=%2.8f\n",solv1[i]);
@@ -54,7 +66,6 @@ int main()
       sum += (M[j + k] * solv1[k]);
     }
     prod[j/solv1.size()] = sum;
-    //printf("solution=%2.8f\n", sum);
   }
   for (int i = 0; i < prod.size(); i++) {
     printf("solution=%2.8f\n", prod[i]);
@@ -82,16 +93,28 @@ int main()
   for (int j = 0; j < b.size(); j++) {
     printf("b-b=%2.8f\n", check[j]);
   }
-
+  */
   std::cout<<std::numeric_limits<double>::epsilon()<<std::endl;
 
-  /*
-  valarray<double> testx, check_sd;
   testx = {-4.0, -2.0};
+  pure_newton = newton(testx, testf1, test_gradient1, test_hessian1, pow(10.0,-3), "modified", "armijo", 50);
+  pure_newton_eval = testf1(pure_newton);
+  std::cout<<"Minimum = "<<pure_newton_eval<<std::endl;
+  std::cout<<"which occurs at the point "<<std::endl;
+  for (int j = 0; j < pure_newton.size(); j++) {
+    std::cout<<pure_newton[j]<<std::endl;
+  }
+
+  valarray<double> check_sd;
   double lx = -1.0;
   double rx = 2.0;
   check_sd = steepest_descent(testf1, test_gradient1, testx, pow(10.0,-3), 50);
-  */
+  sd_eval = testf1(check_sd);
+  std::cout<<"Minimum = "<<sd_eval<<std::endl;
+  std::cout<<"which occurs at the point "<<std::endl;
+  for (int j = 0; j < check_sd.size(); j++) {
+    std::cout<<check_sd[j]<<std::endl;
+  }
 
   /*
   double a = 0.4;
