@@ -24,7 +24,7 @@ CholeskyFactors cholesky(valarray<double> A, int n) {
   are sufficiently positive. Otherwise, D may not be positive definite.
   */
   CholeskyFactors result;
-  valarray<double> C (0.0,n*n), D (0.0,n*n), L (0.0,n*n);
+  valarray<double> C (0.0,n*n), D (0.0, n), L (0.0,n*n);
   double sum1, sum2, theta;
   //double delta = pow(10.0, -8);
   //double beta = 2.0;
@@ -72,10 +72,12 @@ CholeskyFactors cholesky(valarray<double> A, int n) {
 
   result.lower_triangular = L;
   result.diagonal = D;
+  std::cout<<"Size of D = "<<D.size()<<std::endl;
   for (int i = 0; i < n * n; i++) {
       printf("lower triangular=%2.8f\n", result.lower_triangular[i]);
   }
   for (int i = 0; i < n; i++) {
+      std::cout<<"i = "<<i<<std::endl;
       printf("diagonal=%2.8f\n", result.diagonal[i]);
   }
   return result;
