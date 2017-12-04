@@ -1,4 +1,5 @@
 //Function, inputs, and parameters for problem 1 of homework 2a in ISE 520 Fall 2017
+#include <limits>
 #include <iostream>
 #include <cmath>
 #include <stdio.h> //include printf
@@ -36,7 +37,7 @@ int main()
       printf("solution=%2.8f\n",solv1[i]);
   }
   */
-
+  std::cout<<std::numeric_limits<double>::epsilon()<<std::endl;
   valarray<double> testx, check_sd;
   testx = {-4.0, -2.0};
   double lx = -1.0;
