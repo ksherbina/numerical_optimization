@@ -4,7 +4,12 @@
 #include <valarray>
 using std::valarray;
 
-double armijo_rule(double (*f)(valarray<double>), valarray<double> gradient, valarray<double> x0,
+struct Armijo {
+    double stepsize;
+    int fevals;
+};
+
+Armijo armijo_rule(double (*f)(valarray<double>), valarray<double> gradient, valarray<double> x0,
                    valarray<double> direction, double eta, double theta);
  
 #endif

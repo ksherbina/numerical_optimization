@@ -11,8 +11,15 @@ to minimize a function.
 #include <string>
 #include <iostream>
 #include <iterator>
+#include <tuple>
 
 using std::valarray;
+
+struct Armijo {
+    double stepsize;
+    int fevals;
+};
+
 
 int comparison (int iter, double (*f)(valarray<double>), const double& derivative, const valarray<double>& xc,
                 const valarray<double>& d, double steplength, double theta) {
@@ -35,11 +42,13 @@ int comparison (int iter, double (*f)(valarray<double>), const double& derivativ
   }
 }
 
-double armijo_rule(double (*f)(valarray<double>), valarray<double> gradient, valarray<double> x0,
+Armijo armijo_rule(double (*f)(valarray<double>), valarray<double> gradient, valarray<double> x0,
                    valarray<double> direction, double eta, double theta) {
   //User must supply the function f: R^n -> R and the gradient of the function g:R^n.
+  Armijo results;
   double alpha, step, descent;
   int counter = 1;
+  int function_evaluations = 0;
   
   alpha = 1.0;
   descent = std::inner_product(std::begin(gradient), std::end(gradient), std::begin(direction), 0.0);
@@ -51,23 +60,33 @@ double armijo_rule(double (*f)(valarray<double>), valarray<double> gradient, val
     printf("NOTE: LH is the left hand side of Armijo's rule and RH is the right hand side\n");
     printf("%s %*s %*s %*s\n","Iteration", s2, "Steplength", s2, "LH", s3, "RH");
     if (comparison(counter, f, descent, x0, direction, alpha, theta) == 1) {
+      function_evaluations += 1;
       step = pow(eta, counter) * alpha;
       while (comparison(counter+1, f, descent, x0, direction, step, theta) == 1) {
+        function_evaluations += 1;
         alpha = step;
         step = pow(eta, counter) * alpha;
         counter++;
       }
+      function_evaluations += 1;
     } else {
+      function_evaluations += 1;
       alpha = pow(1.0/eta, counter) * alpha;
       while (comparison(counter+1, f, descent, x0, direction, alpha, theta) == 0) {
+        function_evaluations += 1;
         alpha = pow(1.0/eta, counter) * alpha;
         counter++;
       }
+      function_evaluations += 1;
     }
-    return alpha;
+    results.stepsize = alpha;
+    results.fevals = function_evaluations;
+    return results;
     
   } else {
     printf("Current direction is not a descent direction");
-    return 0.0;
+    results.stepsize = 0.0;
+    results.fevals = 0;
+    return results;
   }
 }
