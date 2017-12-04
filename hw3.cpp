@@ -14,11 +14,14 @@
 #include "newton_methods.h"
 #include "armijo_rule.h"
 
-double rosenbrock100(valarray<double> x) {
+using std::valarray; 
+using std::string;
+
+double rosenbrock(valarray<double> x) {
   //n must be even
   //alpha is a user-specified parameter (ex. 1 or 100)
   double value = 0.0;
-  int n = 2;
+  int n = x.size();
   double alpha = 100.0;
   double first_term, second_term;
   for (int i = 0; i < n / 2; i++) {
@@ -29,9 +32,11 @@ double rosenbrock100(valarray<double> x) {
   return value;
 }
 
-valarray<double> rosenbrock_gradient(valarray<double> x, int n, double alpha) {
+valarray<double> rosenbrock_gradient(valarray<double> x) {
   //n must be even
   //alpha is a user-specified parameter (ex. 1 or 100)
+  int n = x.size();
+  double alpha = 100;
   valarray<double> value(0.0, n);
   for (int i = 0; i < n / 2; i++) {
     value[0] = -4.0 * alpha * (x[2 * i + 1] - (x[2 * i] * x[2 * i])) * x[2 * i] - 2.0 * (1 - x[2 * i]) + value[0];
@@ -42,10 +47,12 @@ valarray<double> rosenbrock_gradient(valarray<double> x, int n, double alpha) {
   return value;
 }
 
-valarray<double> rosenbrock_hessian(valarray<double> x, int n, double alpha) {
+valarray<double> rosenbrock_hessian(valarray<double> x) {
   //n must be even
   //alpha is a user-specified parameter (ex. 1 or 100)
-  valarray<double> value(0.0, n*n);
+  int n = x.size();
+  double alpha = 100;
+  valarray<double> value(0.0, n);
   for (int i = 0; i < n / 2; i++) {
     value[0] = 4.0 * alpha * (x[2 * i + 1] - 3.0 * (x[2 * i] * x[2 * i])) + 2.0 + value[0];
     value[1] = 4.0 * alpha * x[2 * i + 1] + value[1];
@@ -58,46 +65,26 @@ valarray<double> rosenbrock_hessian(valarray<double> x, int n, double alpha) {
 
 int main() {
   int ncol = 3;
-  CholeskyFactors check_chol;
   double check_function;
-  valarray<double> check_solv, check_derivative, check_hessian, do_newton1, do_newton2;
-  valarray<double> M = { 2.0, -1.0, 1.0, -1.0, 3.0, 0.0, 1.0, 0.0, 5.0 };
-  valarray<double> b = { 1.0, -2.0, 3.0 };
-  //valarray<double> initial_point = { -1.0, -1.0 };
+  valarray<double> check_derivative, check_hessian, pure_newton;
   valarray<double> initial_point = { -1.2, -1.2 };
   double epsilon = pow(10.0, -6);
   double alpha = 1.0;
   
-  check_chol = cholesky(M, ncol, 0);
-  check_solv = solve_linear_system(check_chol, b, ncol);
-  check_function = rosenbrock100(initial_point);
+  check_function = rosenbrock(initial_point);
   std::cout<<"Initial Rosenbrock function value = "<<check_function<<std::endl;
-  check_derivative = rosenbrock_gradient(initial_point, 2, alpha);
+  check_derivative = rosenbrock_gradient(initial_point);
   for (int i = 0; i < check_derivative.size(); i++) {
     printf("f'[%d] = %.8f \n", i, check_derivative[i]);
   }
-  check_hessian = rosenbrock_hessian(initial_point, 2, alpha);
+  check_hessian = rosenbrock_hessian(initial_point);
   for (int i = 0; i < check_hessian.size(); i++) {
     printf("f''[%d] = %.8f \n", i, check_hessian[i]);
   }
   
-  //Pure Netwon
-  std::cout<<"Pure Netwon"<<std::endl;
-  do_newton1 = newton_methods(rosenbrock100, rosenbrock_gradient, rosenbrock_hessian,
-                                alpha, initial_point, ncol, epsilon, 1, 0);
-  
-  for (int i = 0; i < do_newton1.size(); i++) {
-    printf("x[%d] = %.8f \n", i, do_newton1[i]);
-  }
-  
-  //Modified Newton
+  //Modified Netwon
   std::cout<<"Modified Netwon"<<std::endl;
-  do_newton2 = newton_methods(rosenbrock100, rosenbrock_gradient, rosenbrock_hessian,
-                              alpha, initial_point, ncol, epsilon, 1, 1);
-  for (int i = 0; i < do_newton2.size(); i++) {
-    printf("x[%d] = %.8f \n", i, do_newton2[i]);
-  }
-  //std::cout<<std::numeric_limits<double>::epsilon()<<std::endl;
+  pure_newton = newton_methods(initial_point, rosenbrock, rosenbrock_gradient, rosenbrock_hessian, epsilon, "modified", "armijo", 50); 
   
   return 0;
 }
