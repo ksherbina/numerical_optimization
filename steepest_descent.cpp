@@ -14,14 +14,17 @@ using std::valarray;
 valarray<double> steepest_descent(double (*f)(valarray<double>), valarray<double> (*g)(valarray<double>), valarray<double> x0, double epsilon, int MAX_ITER) {
 
   int k = 0;  
-  double fx, stepsize, gnorm, a, b;
+  int func_evals = 0;
+  double stepsize, gnorm, a, b;
   valarray<double> x, gx, d, newx;
+  Armijo steps;
   
   x = x0;
-  fx = f(x);
   gx = g(x);
   gnorm = std::sqrt(std::inner_product(std::begin(gx), std::end(gx), std::begin(gx), 0.0));
   
+  int gradient_evaluations = 1;
+
   std::cout << "Enter left endpoint for Golden Section Search: ";
   std::cin >> a;
   std::cout << "Enter right endpoint for Golden Section Search: ";
@@ -31,12 +34,15 @@ valarray<double> steepest_descent(double (*f)(valarray<double>), valarray<double
   printf("%s %s %*s %*s %*s \n","Iteration (i)", "x_i[0]", s2, "x_i[1]", s2, "f(x_i)", s2, "norm of gradient");
 
   while (gnorm > epsilon) {
-    printf("%d %*.8f %*.8f %*.8f %*.8f \n", k, s1, x[0], s3, x[1], s3, fx, s3, gnorm);
+    printf("%d %*.8f %*.8f %*.8f \n", k, s1, x[0], s3, x[1], s3, gnorm);
     d = -gx;
-    newx = golden_section_search(x.size(), f, x, a, b, d, pow(10.0, -3));
-    x = newx;
-    fx = f(x);
+    steps = armijo_rule(f, gx, x, d, 2.0, 0.5);
+    func_evals += steps.fevals;
+    //newx = golden_section_search(x.size(), f, x, a, b, d, pow(10.0, -3));
+    //x = newx;
+    x += (steps.stepsize * d);
     gx = g(x);
+    gradient_evaluations += 1;
     gnorm = std::sqrt(std::inner_product(std::begin(gx), std::end(gx), std::begin(gx), 0.0));
     k++;
     if (k > MAX_ITER) {
@@ -44,7 +50,7 @@ valarray<double> steepest_descent(double (*f)(valarray<double>), valarray<double
       break;
     }
   }
-
+  std::cout<<gradient_evaluations<<" gradient evaluations"<<std::endl;
   return x;
 }
 
