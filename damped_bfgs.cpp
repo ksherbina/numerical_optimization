@@ -51,111 +51,18 @@ valarray<double> multiply_vector_by_its_transpose(valarray<double> y) {
   return mat;
 }
 
-valarray<double> quasi_newton(valarray<double> x0, double (*func)(valarray<double>), valarray<double> (*grad)(valarray<double>),
-                                double epsilon, string newton_type, string linsearch_type, int MAX_ITER) {
+valarray<double> damped_bfgs(valarray<double> B0, valarray<double> delta, valarray<double> gamma) { 
 
-  /*
-  newton_type denotes the type of quasi-newton method: dfp, bfgs, or damped-bfgs (for constrained optimization)
-  */
-  valarray<double> x, gx, gx0, delta, gamma, d, H0(0.0, x0.size() * x0.size()), H, term1, term2, hgamma, hdelta, add_rank1, subtract_rank1;
-  CholeskyFactors hxc0, hxc;
-  Armijo steps;
-  double fx, gradient_norm, curvature, sum, stepsize;
-  int func_evals = 0;
-  int counter = 0;
-
-  x = x0;
-  gx = grad(x);
-
-  int gradient_evaluations = 1;
+  double theta;
+  valarray<double> rk, B;
   
-  gradient_norm = std::sqrt(std::inner_product(std::begin(gx), std::end(gx), std::begin(gx), 0.0)); 
-  /*
-  hx = hess(x);
-  hxc = cholesky(hx, x.size());
-  d = solve_linear_system(hxc, -gx, gx.size());
-  std::cout<<"Check direction: "<<scalar_product_of_two_vectors(gx, d)<<std::endl;
-  */
-  
-  if (newton_type == "dfp") {
-    for (int i = 0; i < H0.size(); i += (x.size() + 1)) {
-      H0[i] = 1.0;
-    } 
-    d = multiply_matrix_by_vector(-H, gx);
-  }
+  // compute theta as in equation (18.15) in Nocedal & Wright
+  // compute rk as in Procedure 18.2 in Nocedal & Wright 
+   
+  add_rank1 = multiply_vector_by_its_transpose(r) / scalar_product_of_2_vectors(delta, r);
+  hdelta = multiply_matrix_by_vector(B0, delta);
+  subtract_rank1 = hdelta / scalar_product_of_2_vectors(delta, hdelta);
+  B = B0 - subtract_rank1 + add_rank1
 
-  if (newton_type == "bfgs") {
-    for (int i = 0; i < H0.size(); i += (x.size() + 1)) {
-      H0[i] = 1.0;
-    } 
-    hxc = cholesky(H0, x.size());
-    d = solve_linear_system(hxc, -gx, gx.size());
-  }
-
-  if (newton_type == "damped-bfgs") {
-    for (int i = 0; i < H0.size(); i += (x.size() + 1)) {
-      H0[i] = 1.0;
-    } 
-    hxc = cholesky(H0, x.size());
-  }
-
-  int s1=22,s2=16,s3=14;
-  printf("%s %s %*s %*s %*s \n","Iteration (i)", "x_i[0]", s2, "x_i[1]", s2, "f(x_i)", s2, "norm of gradient");
-
-  while (gradient_norm > epsilon) {
-    fx = func(x);
-    printf("%d %*.8f %*.8f %*.8f %*.8f \n", counter, s1, x[0], s3, x[1], s3, fx, s3, gradient_norm);
-    if (counter > 0) {
-      if (newton_type == "dfp") {
-        delta = x - x0;
-        gamma = gx - gx0;
-        hgamma = multiply_matrix_by_vector(H0, gamma);
-        term1 = multiply_vector_by_its_transpose(hgamma)/scalar_product_of_2_vectors(gamma, hgamma);
-        term2 = multiply_vector_by_its_transpose(delta)/scalar_product_of_2_vectors(gamma, delta);
-        H = H0 - term1 - term2;
-        d = multiply_matrix_by_vector(-H, gx);
-        H0 = H;
-      }
-      if (newton_type == "bfgs") {   
-        delta = x - x0;
-        gamma = gx - gx0;
-        curvature = std::inner_product(std::begin(delta), std::end(delta), std::begin(gamma), 0.0);
-        add_rank1 = multiply_vector_by_its_transpose(gamma) / scalar_product_of_2_vectors(gamma, delta);
-        hdelta = multiply_matrix_by_vector(H0, delta);
-        subtract_rank1 = hdelta / scalar_product_of_2_vectors(delta, hdelta);
-        if (curvature > 0) {
-          hxc = cholesky_ranktwo(add_rank1, subtract_rank1, hxc0);
-          d = solve_linear_system(hxc, -gx, gx.size());
-          H0 = H;
-          hxc0 = hxc;
-        } 
-      } 
-    } 
-    if (scalar_product_of_2_vectors(gx, -d) < 0) {
-      x0 = x;
-      if (newton_type == "damped-bfgs") {
-      // Get d and multipliers from QP solution using cplex
-      // p_lambnda = muliplier from cplex - previous multiplier
-      // Modified armijo's rule
-      // update multiplier
-      } else {
-        gx0 = gx;
-        steps = armijo_rule(func, gx0, x0, d, 2.0, 0.5);
-      }
-      func_evals += steps.fevals;
-      x = x0 + steps.stepsize * d;
-      gx = grad(x);
-    } else {
-      std::cout<<"Direction is not a direction of descent"<<std::endl;
-      break;
-    }
-    counter += 1;
-    if (counter > MAX_ITER) {
-      printf("Maximum iterations exceeded \n");
-      break;
-    }
-  }
-  std::cout<<func_evals<<" function evaluations"<<std::endl;
-  std::cout<<gradient_evaluations<<" gradient evaluations"<<std::endl;
-  return x;
+  return B;
 }
