@@ -1,4 +1,4 @@
-//Function, inputs, and parameters for problem 1 of homework 2a in ISE 520 Fall 2017
+// Check line search and direction finding methods with a well-behaved function
 #include <limits>
 #include <iostream>
 #include <cmath>

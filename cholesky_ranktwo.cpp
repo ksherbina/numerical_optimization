@@ -1,6 +1,6 @@
 /*
-Find Cholesky factors of a square matrix and check if the 
-matrix is positive definite.
+Find Cholesky factors of a square matrix by first adding 
+and subtracting a rank one matrix to current matrix.
 */
 #include <limits>
 #include <iostream>

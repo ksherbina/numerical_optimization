@@ -1,3 +1,4 @@
+// BFGS and DFP update of Hessian matrix
 #include <iostream>
 #include <cmath>
 #include <stdio.h> //for printf
